@@ -1,3 +1,22 @@
+#. 차후 할 일
+    -- 망 분리(host, guest)
+    - 백업관리(DB, 리눅스)
+    - git
+    - 개발에서 운영반영 방법
+
+
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout xsvr.duckdns.org.key -out xsvr.duckdns.org.key.crt
+sudo chmod 700 /etc/ssl/ssc
+
+#. root 패스워드 변경
+sudo passwd root
+J****J***L***!
+
+0 06 1 * * /user/bin/certbot renew --renew-hook="sudo systemctl restart apache2"
+
+sudo systemctl restart apache2
+systemctl status apache2.service
+
 git@github.com:xtype1016/stay_m.git
 
 CodeIgniter 4 Models preloading
