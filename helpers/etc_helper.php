@@ -78,7 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     {
         $CI =& get_instance();
 
-        info_log("My_etc_Helper/get_mobile_cls", "_SERVER['HTTP_USER_AGENT']  = [" . $_SERVER['HTTP_USER_AGENT'] . "]");
+        info_log("etc_Helper/get_mobile_cls", "_SERVER['HTTP_USER_AGENT']  = [" . $_SERVER['HTTP_USER_AGENT'] . "]");
 
         if( stristr($_SERVER['HTTP_USER_AGENT'],'ipad') )
         {
@@ -102,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $device = "etc";
         }
 
-        info_log("My_etc_Helper/get_mobile_cls", "device  = [" . $device . "]");
+        info_log("etc_Helper/get_mobile_cls", "device  = [" . $device . "]");
 
         return $device;
     }

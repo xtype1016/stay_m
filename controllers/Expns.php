@@ -16,7 +16,6 @@ class Expns extends CI_Controller
         $this->load->helper('url');
         $this->load->helper('cookie');
         //$this->load->helper('My_alert_log');
-        $this->load->helper('MY_login_helper');
         $this->load->library('user_agent');
 
         $usr_no = get_cookie('usr_no');

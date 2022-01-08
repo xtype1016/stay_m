@@ -24,8 +24,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 $config['base_url'] = '';
 $config['base_url'] = 'http://www.stayingm.co.kr';
-*/
 $config['base_url'] = 'https://xsvr.duckdns.org';
+*/
+$config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -390,7 +391,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 $config['sess_driver'] = 'database';
 //http://koreaparks.tistory.com/145
 //https://sanghaklee.tistory.com/49
-//sess_save_path: Å×ÀÌºí¸í
+//sess_save_path: ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½
 $config['sess_save_path'] = 'ci_sessions';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 1800;

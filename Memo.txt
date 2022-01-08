@@ -1,8 +1,8 @@
 #. 차후 할 일
     -- 망 분리(host, guest)
     - 백업관리(DB, 리눅스)
-    - git
-    - 개발에서 운영반영 방법
+    -- git
+    -- 개발에서 운영반영 방법
 
 
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout xsvr.duckdns.org.key -out xsvr.duckdns.org.key.crt
