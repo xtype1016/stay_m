@@ -1,64 +1,52 @@
-<div class="container">
-    <header>
-        <!--
-        <h3><p class="text-justify">[Staying M] 로그인</p></h3>
-        -->
-    </header>
-    <br>
 
-    <!--
-    <?php echo validation_errors(); ?>
-    -->
-    <?php
-    if(validation_errors() !== "")
-    {
-        ?>
-        <script language="JavaScript" type="text/javascript">
-        //<!--
-            alert("<?=str_replace("\n", "\\n", strip_tags(validation_errors()))?>");
-        //-->
-        </script>
-        <?php
-    }
-    ?>
+    <section class="h-100 py-2">
+        <div class="container h-100">
+            <div class="row justify-content-sm-center h-100">
+                <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <h1 class="fs-5 card-title fw-bold mb-4 border-bottom">Login</h1>
+                            <?php echo form_open('', 'class="needs-validation" novalidate" id="login_form"'); ?>
+                                <div class="mb-3 py-2">
+                                    <label class="mb-2 text-muted" for="email">E-Mail Address</label>
+                                    <input id="usr_id" type="email" class="form-control" name="usr_id" value="" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Email을 입력해 주세요
+                                    </div>
+                                </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <?php echo form_open('', 'class="form-horizontal" id="login_form"'); ?>
-                <div class="form-group form-group-sm row">
-                    <label class="col-xs-4 control-label" for="usr_id"><h6><strong>아이디</h6></strong></label>
-                    <div class="col-xs-8">
-                        <input type="text" class="form-control" id="usr_id" name="usr_id" value="">
-                    </div>
-                </div>
+                                <div class="mb-3">
+                                    <div class="mb-2 w-100">
+                                        <label class="text-muted" for="password">Password</label>
+                                    </div>
+                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <div class="invalid-feedback">
+                                        비밀번호를 입력해 주세요
+                                    </div>
+                                </div>
 
-                <div class="form-group form-group-sm row">
-                    <label class="col-xs-4 control-label" for="password"><h6><strong>비밀번호</h6></strong></label>
-                    <div class="col-xs-8">
-                        <input type="password" class="form-control" id="password" name="password" value="">
-                    </div>
-                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="remember_me" id="remember_me" class="form-check-input">
+                                        <label for="remember" class="form-check-label">자동로그인</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary active ms-auto">
+                                        Login
+                                    </button>
+                                </div>
 
-                <div class="form-group form-group-sm row">
-                    <div class="col-xs-offset-9">
-                        <div class="checkbox">
-                            <label class="col-xs-13 control-label" for="at">
-                                <input type="checkbox" id="at" name="atln" value="1" <?php echo set_checkbox('atln', '1'); ?> />자동로그인
-                            </label>
+                                <div class="d-flex justify-content-evenly my-2">
+                                    <a href="join.html">
+                                        회원가입
+                                    </a>
+                                    <a href="forgot.html">
+                                        비밀번호찾기
+                                    </a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group form-group-sm row">
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-primary btn-sm" id="login">로그인</button>
-                        <!--
-                        <a href="/schedule_upd/upd/" class="btn btn-default">아이디/비밀번호 찾기</a>
-                        -->
-                        <a href="/join/" class="btn btn-default btn-sm">회원가입</a>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </section>

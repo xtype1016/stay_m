@@ -1,6 +1,7 @@
 #. 차후 할 일
     -- 망 분리(host, guest)
     - 백업관리(DB, 리눅스)
+      https://blog.naver.com/bomnarain/222089816106
     -- git
     -- 개발에서 운영반영 방법
 
@@ -322,13 +323,49 @@ SELECT * FROM information_schema.EVENTS
 CREATE EVENT everyDayEvent1
     ON SCHEDULE
  EVERY 1 DAY
-STARTS '2020-09-03 06:30:00'
+STARTS '2021-01-14 17:00:00'
     DO CALL FIX_EXPNS_TRNSCT();
+
+CREATE EVENT everyDayEvent2
+    ON SCHEDULE
+ EVERY 1 DAY
+STARTS '2021-01-14 17:10:00'
+    DO CALL DEPOSIT_WITHDRAW();
+
+
+#. 이벤트 보기
+SELECT * FROM information_schema.EVENTS
+
+DELIMITER $$
+DROP EVENT everyDayEvent1;
+CREATE EVENT everyDayEvent1
+	ON SCHEDULE
+		EVERY 1 DAY STARTS '2021-01-14 17:00:00'
+	ON COMPLETION PRESERVE
+	ENABLE
+	COMMENT ''
+	DO
+	    BEGIN
+        	SELECT  @_stnd_dt := date_format(CURDATE(), '%Y%m%d');
+        	CALL FIX_EXPNS_TRNSCT(@_stnd_dt);
+        	CALL DEPOSIT_WITHDRAW(@_stnd_dt);
+        END $$
+DELIMITER ;
+
 
 SELECT * FROM information_schema.`EVENTS` ;
 
 
+#. Procedure 실행 권한
+SELECT * FROM information_schema.ROUTINES;
 
+UPDATE mysql.proc SET DEFINER = 'xtype@192.168.1.21' WHERE db = 'stay_m' AND TYPE = 'PROCEDURE';
+
+//GRANT CREATE, ALTER ROUTINE ON DB명.* TO '계정명';
+//GRANT CREATE, ALTER ROUTINE ON stay_m.* TO 'root';
+//GRANT CREATE, ALTER ROUTINE ON stay_m.* TO 'xtype'@'192.168.1.71';
+//GRANT CREATE, ALTER ROUTINE ON stay_m.* TO 'xtype'@'192.168.1.21';
+//FLUSH PRIVILEGES;
 
 #. 잔디 관리
     - 잔디 엣지(화단 경계)
@@ -1010,38 +1047,9 @@ GRANT ALL PRIVILEGES ON stay_m.* TO 'xtype'@'192.168.1.71' IDENTIFIED BY 'kang10
 
 FLUSH PRIVILEGES;
 
-#. Procedure 실행 권한
-SELECT * FROM information_schema.ROUTINES;
 
-//GRANT CREATE, ALTER ROUTINE ON DB명.* TO '계정명';
-//GRANT CREATE, ALTER ROUTINE ON stay_m.* TO 'root';
-//GRANT CREATE, ALTER ROUTINE ON stay_m.* TO 'xtype'@'192.168.1.71';
 
 출처: https://hakurei.tistory.com/261 [Reimu's Development Blog]
-
-
-#. 이벤트 보기
-SELECT * FROM information_schema.EVENTS
-
-DELIMITER $$
-DROP EVENT `everyDayEvent1`;
-CREATE EVENT `everyDayEvent1`
-	ON SCHEDULE
-		EVERY 1 DAY STARTS '2020-09-12 17:00:00'
-	ON COMPLETION PRESERVE
-	ENABLE
-	COMMENT ''
-	DO
-	    BEGIN
-        	SELECT  @_stnd_dt := date_format(CURDATE(), '%Y%m%d');
-        	CALL FIX_EXPNS_TRNSCT(@_stnd_dt);
-        	CALL DEPOSIT_WITHDRAW(@_stnd_dt);
-        END $$
-DELIMITER ;
-
-
-
-
 
 #. Maria DB 외부접속 환경 설정
 GRANT ALL PRIVILEGES ON stay_m.* TO 'xtype'@'192.168.1.71' IDENTIFIED BY 'kang1121!' WITH GRANT OPTION;

@@ -337,33 +337,37 @@ class Fix_expns extends CI_Controller
                     $memo = NULL;
                 }
 
-                if (strlen($this->input->post('sttlmt_yn', 'TRUE')) > 0)
-                {
-                    $sttlmt_yn = $this->input->post('sttlmt_yn', 'TRUE');
-                }
-                else
+                $sttlmt_yn = $this->input->post('sttlmt_yn', 'TRUE');
+                info_log("fix_expns/upd/", "sttlmt_yn = [" . $sttlmt_yn . "]");
+
+                if (strlen($sttlmt_yn) == 0)
                 {
                     $sttlmt_yn = 'N';
                 }
 
+                info_log("fix_expns/upd/", "final sttlmt_yn = [" . $sttlmt_yn . "]");
+
+                //2022.01.14 이미 존재하는 고정지출 건의 수정처리이므로 당연히 기존 데이터가 존재함
+                //처리 필요가 없어 주석처리함. 왜 만들었지???
                 //출금의 경우 동월에 동일한 분류는 1건만 존재하는지 여부 체크
-                if (strcmp($sttlmt_yn, "Y") == 0)
-                {
-                    $dup_chk = $this->stay_m->get_fix_expns_withdraw_dup_chk($this->input->post('io_tr_cls' , 'TRUE'));
+                //if (strcmp($sttlmt_yn, "Y") == 0)
+                //{
+                //    $dup_chk = $this->stay_m->get_fix_expns_withdraw_dup_chk($this->input->post('io_tr_cls' , 'TRUE'));
+                //
+                //    info_log("fix_expns/upd/", "dup_chk cnt = [" . $dup_chk->cnt . "]");
+                //
+                //    if ($dup_chk->cnt != 1)
+                //    {
+                //        alert_log("fix_expns/upd/", "동일 출금거래 존재! 추가 수정 불가! [" . $this->input->post('io_tr_cls', 'TRUE') . "]");
+                //    }
+                //}
 
-                    info_log("fix_expns/upd/", "dup_chk cnt = [" . $dup_chk->cnt . "]");
-
-                    if ($dup_chk->cnt != 1)
-                    {
-                        alert_log("fix_expns/upd/", "동일 출금거래 존재! 추가 수정 불가! [" . $this->input->post('io_tr_cls', 'TRUE') . "]");
-                    }
-                }
-
+                // 2022.01.14 왜 있는지 모르겠다....
                 //지출 채널, 출금여부 정합성 체크 Begin
-                if (strcmp($expns_chnl_cls, "01") == 0)
-                {
-                    $sttlmt_yn = 'N';
-                }
+                //if (strcmp($expns_chnl_cls, "01") == 0)
+                //{
+                //    $sttlmt_yn = 'N';
+                //}
 
                 if (strcmp($expns_chnl_cls, "01") != 0 && strcmp($sttlmt_yn, "Y") == 0)
                 {
