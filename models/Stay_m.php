@@ -1509,6 +1509,7 @@ class Stay_m extends CI_Model
                                 ,tba003i00  c
                           where  a.db_no = ?
                             and  a.expns_dt like concat(?, '%')
+                            and  a.ssamzi_yn = 'N'
                             and  a.del_yn = 'N'
                             and  b.db_no = '0000000000'
                             and  b.clm_nm = 'COST_CLS'
@@ -1609,7 +1610,7 @@ class Stay_m extends CI_Model
                              when a.db_no is not null and expns_chnl_cls is null then concat(?, '/BZ')
                              else a.key_val
                         end  key_val
-                       ,case when expns_chnl_cls is null then a.amt - ifnull(a.chnl_othr_3_amt, 0)
+                       ,case when expns_chnl_cls is null then a.amt - ifnull(a.chnl_othr_3_amt, 0) - ifnull(a.ssamzi_amt, 0)
                              else a.amt
                         end  amt
                   from  (
@@ -1618,6 +1619,7 @@ class Stay_m extends CI_Model
                                 ,b.clm_val_nm                      expns_chnl_cls_nm
                                 ,concat(?, '/', a.expns_chnl_cls)  key_val
                                 ,sum(case when b.othr_info = '3' then a.amt end)  chnl_othr_3_amt
+                                ,sum(case when a.ssamzi_yn = 'Y' then a.amt end)  ssamzi_amt
                                 ,sum(a.amt)                        amt
                            from  tbb001l00  a
                                 ,tba003i00  b
@@ -1671,13 +1673,14 @@ class Stay_m extends CI_Model
                        ,c.clm_val_nm
                        ,concat(?, '/', a.expns_cls)  key_val
                        ,case when a.expns_cls is not null then a.amt
-                             when a.othr_info = '00000' then a.amt - ifnull(a.chnl_othr_3_amt, 0)
+                             when a.othr_info = '00000' then a.amt - ifnull(a.chnl_othr_3_amt, 0) - ifnull(a.ssamzi_amt, 0)
                              else a.amt - ifnull(a.chnl_othr_3_amt, 0)
                         end  amt
                   from  (
                         select  ifnull(b.othr_info, '00000')  othr_info
                                ,a.expns_cls
                                ,sum(case when c.othr_info = '3' then a.amt end)  chnl_othr_3_amt
+                               ,sum(case when a.ssamzi_yn = 'Y' then a.amt end)  ssamzi_amt
                                ,sum(a.amt)  amt
                                ,b.clm_nm
                                ,a.db_no

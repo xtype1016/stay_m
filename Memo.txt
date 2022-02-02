@@ -367,6 +367,12 @@ UPDATE mysql.proc SET DEFINER = 'xtype@192.168.1.21' WHERE db = 'stay_m' AND TYP
 //GRANT CREATE, ALTER ROUTINE ON stay_m.* TO 'xtype'@'192.168.1.21';
 //FLUSH PRIVILEGES;
 
+
+#. Procedure 호출
+SELECT  @_stnd_dt := date_format(CURDATE(), '%Y%m%d');
+CALL FIX_EXPNS_TRNSCT(@_stnd_dt);
+CALL DEPOSIT_WITHDRAW(@_stnd_dt);
+
 #. 잔디 관리
     - 잔디 엣지(화단 경계)
         - https://www.finegardening.com/article/perfect-edges-for-your-beds-and-borders
@@ -1095,10 +1101,7 @@ mysql -uroot -p stay_m < DB_stay_m_20211026_1205.sql
 유연한 가격정책 방안
 
 
-#. Procedure 호출
-SELECT  @_stnd_dt := date_format(CURDATE(), '%Y%m%d');
-CALL FIX_EXPNS_TRNSCT(@_stnd_dt);
-CALL DEPOSIT_WITHDRAW(@_stnd_dt);
+
 
 
 #. 매년 년말 휴일 등록 필요

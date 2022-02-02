@@ -52,7 +52,7 @@
                     </ul>
                 </div>
 
-                <div class="btn-group btn-group-sm dropup" role="group">
+                <div class="btn-group btn-group-sm dropup navbar-right" role="group">
                     <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         <span class="caret"></span>
