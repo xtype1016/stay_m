@@ -1,9 +1,16 @@
 #. 차후 할 일
+    - 계좌 거래내역 처리 개발
+        - 거래내역 테이블, IUDQ
+    - 년 기준 월별 수익 조회 화면 개발
+    - 관리자 운영 로그인 기능 개발
+
+
     -- 망 분리(host, guest)
     - 백업관리(DB, 리눅스)
       https://blog.naver.com/bomnarain/222089816106
     -- git
     -- 개발에서 운영반영 방법
+    
 
 
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout xsvr.duckdns.org.key -out xsvr.duckdns.org.key.crt

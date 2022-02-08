@@ -67,7 +67,13 @@ Class Auth extends CI_Controller
 
         if (isset($_SESSION['usr_no']))
         {
-            redirect(base_url("/incm"));
+            if (strcmp($_SESSION['usr_no'], "0000000006") == 0) {
+                redirect(base_url("/time_mng"));
+            }
+            else
+            {
+                redirect(base_url("/incm"));
+            }
         }
 
         echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';

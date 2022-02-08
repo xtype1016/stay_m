@@ -3962,6 +3962,7 @@ class Stay_m extends CI_Model
                        ,case when b.othr_info = '1' then '게임'
                              when b.othr_info = '2' then '유튜브'
                              when b.othr_info = '3' then '들엄시민'
+                             when b.othr_info = '4' then '인터넷'
                         end   time_cls_nm
                        ,b.othr_info
                        ,SUM(a.time)  time
