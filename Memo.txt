@@ -1,12 +1,12 @@
 #. 차후 할 일
-    - 계좌 거래내역 처리 개발
-        - 거래내역 테이블, IUDQ
     - 년 기준 월별 수익 조회 화면 개발
     - 관리자 운영 로그인 기능 개발
 
-
+    -- >> 기존 방식 유지
+       계좌 거래내역 처리 개발
+        - 거래내역 테이블, IUDQ
     -- 망 분리(host, guest)
-    - 백업관리(DB, 리눅스)
+    -- 백업관리(DB, 리눅스)
       https://blog.naver.com/bomnarain/222089816106
     -- git
     -- 개발에서 운영반영 방법
@@ -330,13 +330,13 @@ SELECT * FROM information_schema.EVENTS
 CREATE EVENT everyDayEvent1
     ON SCHEDULE
  EVERY 1 DAY
-STARTS '2021-01-14 17:00:00'
+STARTS '2021-02-10 09:00:00'
     DO CALL FIX_EXPNS_TRNSCT();
 
 CREATE EVENT everyDayEvent2
     ON SCHEDULE
  EVERY 1 DAY
-STARTS '2021-01-14 17:10:00'
+STARTS '2021-02-10 09:10:00'
     DO CALL DEPOSIT_WITHDRAW();
 
 
