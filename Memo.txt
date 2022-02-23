@@ -1,3 +1,19 @@
+#. 토지
+https://www.jejuall.com/CProperty/detail?num=610657#undefined2
+https://www.jejuall.com/CProperty/detail?num=609290#undefined2
+--https://www.jejuall.com/CProperty/detail?num=611244#undefined2
+-- 서쪽으로는 한림 정도까지
+https://www.jejuall.com/CProperty/detail?num=607712#undefined2
+
+###
+https://www.jejuall.com/CProperty/detail?num=614984#undefined2
+
+#. flutter 개발 환경 세팅
+    https://events.flutter.dev/engage/learn/beginner
+    https://docs.flutter.dev/get-started/install/windows
+    # https://brunch.co.kr/@mystoryg/114
+
+
 #. 차후 할 일
     - 년 기준 월별 수익 조회 화면 개발
     - 관리자 운영 로그인 기능 개발

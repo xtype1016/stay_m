@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-
+<!--
                 <div class="form-group form-group-sm row">
                     <label class="col-xs-4 control-label" for="expns_group_no"><h6><strong>지출그룹번호</h6></strong></label>
                     <div class="col-xs-8">
@@ -115,7 +115,7 @@
                         </select>
                     </div>
                 </div>
-
+-->
                 <div class="form-group form-group-sm row">
                     <label class="col-xs-4 control-label" for="sttlmt_yn"><h6><strong>결제여부</h6></strong></label>
                     <div class="col-xs-8">
@@ -135,6 +135,13 @@
                                 <option value="<?php echo $io_tr_slist->clm_val; ?>" <?php echo set_select('io_tr_cls', $io_tr_slist->clm_val, $selected)?>><?php echo $io_tr_slist->clm_val_nm; ?></option>
                             <?php }; ?>
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-sm row">
+                    <label class="col-xs-4 control-label" for="trnsfr_day"><h6><strong>이체일</h6></strong></label>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control" id="trnsfr_day" name="trnsfr_day" autocomplete="off" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { echo set_value('trnsfr_day', substr($stnd_dt, 8, 2)); } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('trnsfr_day', $view->trnsfr_day); } ?>">
                     </div>
                 </div>
 

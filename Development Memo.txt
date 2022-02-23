@@ -1,0 +1,9 @@
+Development Memo
+
+#. 고정지출 입력시 그룹 제거
+    - 이체 일자와 연결계좌로 group by
+
+ALTER TABLE `tbb005l00`
+	ADD COLUMN `TRNSFR_DAY` CHAR(2) NOT NULL COMMENT '이체일' AFTER `IO_TR_CLS`,
+	CHANGE COLUMN `EXPNS_DAY` `EXPNS_DAY` CHAR(2) NOT NULL COMMENT '지출일' COLLATE 'utf8_general_ci' AFTER `TRNSFR_DAY`,
+	DROP COLUMN `EXPNS_GROUP_NO`;

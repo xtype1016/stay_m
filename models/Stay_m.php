@@ -3611,9 +3611,9 @@ class Stay_m extends CI_Model
     {
         $i_data = array('db_no'           => $_SESSION['db_no']
                        ,'fix_expns_srno'  => $arr_data['fix_expns_srno']
+                       ,'trnsfr_day'      => $arr_data['trnsfr_day']
                        ,'expns_day'       => $arr_data['expns_day']
                        ,'expns_nm'        => $arr_data['expns_nm']
-                       ,'expns_group_no'  => $arr_data['expns_group_no']
                        ,'expns_day'       => $arr_data['expns_day']
                        ,'expns_chnl_cls'  => $arr_data['expns_chnl_cls']
                        ,'sttlmt_yn'       => $arr_data['sttlmt_yn']
@@ -3641,7 +3641,7 @@ class Stay_m extends CI_Model
     {
         $this->db->select("a.fix_expns_srno
                           ,a.expns_nm
-                          ,a.expns_group_no
+                          ,a.trnsfr_day
                           ,a.io_tr_cls
                           ,a.expns_day
                           ,a.expns_chnl_cls
@@ -3679,7 +3679,7 @@ class Stay_m extends CI_Model
         $u_data = array(
                         'expns_day'       => $arr_data['expns_day']
                        ,'expns_nm'        => $arr_data['expns_nm']
-                       ,'expns_group_no'  => $arr_data['expns_group_no']
+                       ,'trnsfr_day'      => $arr_data['trnsfr_day']
                        ,'expns_day'       => $arr_data['expns_day']
                        ,'expns_chnl_cls'  => $arr_data['expns_chnl_cls']
                        ,'sttlmt_yn'       => $arr_data['sttlmt_yn']
@@ -3726,7 +3726,7 @@ class Stay_m extends CI_Model
     {
         $this->db->select("a.fix_expns_srno
                           ,a.expns_nm
-                          ,a.expns_group_no
+                          ,a.trnsfr_day
                           ,a.expns_day
                           ,a.expns_chnl_cls
                           ,b.clm_val_nm    expns_chnl_cls_nm
@@ -3738,9 +3738,9 @@ class Stay_m extends CI_Model
                           ,a.bank
                           ,d.clm_val_nm    bank_nm
                           ,a.ac_no
-                          ,row_number() over (partition by a.expns_group_no order by a.expns_group_no, a.expns_day, a.fix_expns_srno)    rownum
-                          ,count(a.fix_expns_srno) over (partition by a.expns_group_no)  rowspan_val
-                          ,sum(a.amt) over (partition by a.expns_group_no)               sum_amt
+                          ,row_number() over (PARTITION BY CONCAT(a.trnsfr_day, a.ac_no) ORDER BY a.trnsfr_day, a.ac_no, a.expns_day, a.fix_expns_srno)    rownum
+                          ,count(a.fix_expns_srno) over (PARTITION BY  a.trnsfr_day, a.ac_no)  rowspan_val
+                          ,sum(a.amt) over (PARTITION BY a.trnsfr_day, a.ac_no)               sum_amt
                           ");
         $this->db->from('tbb005l00  a');
         $this->db->join('tba003i00  b', "b.clm_val = a.expns_chnl_cls and b.db_no   IN ('0000000000', a.db_no) and b.clm_nm  = 'EXPNS_CHNL_CLS'", 'left outer');
@@ -3756,7 +3756,7 @@ class Stay_m extends CI_Model
             $this->db->or_where("a.sttlmt_yn = 'Y')");
         }
 
-        $this->db->order_by("a.expns_group_no, a.expns_day, a.fix_expns_srno");
+        $this->db->order_by("a.trnsfr_day, a.ac_no, a.expns_day, a.fix_expns_srno");
 
         if (isset($limit) && isset($offset)) {
             $this->db->limit($limit, $offset);

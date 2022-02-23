@@ -225,9 +225,24 @@ class Fix_expns extends CI_Controller
 
                 $fix_expns_srno = $this->stay_m->get_clm_sr_val('FIX_EXPNS_SRNO');
 
+                //2022.02.23. group_no 삭제, trnsfr_day 추가
+                //$i_data = array('fix_expns_srno' => $fix_expns_srno
+                //               ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
+                //               ,'expns_group_no' => $this->input->post('expns_group_no' , 'TRUE')
+                //               ,'expns_day'      => $this->input->post('expns_day'      , 'TRUE')
+                //               ,'expns_chnl_cls' => $this->input->post('expns_chnl_cls' , 'TRUE')
+                //               ,'sttlmt_yn'      => $sttlmt_yn
+                //               ,'expns_cls'      => $expns_cls
+                //               ,'whr_to_buy'     => $whr_to_buy
+                //               ,'amt'            => $amt
+                //               ,'memo'           => $memo
+                //               ,'bank'           => $this->input->post('bank' , 'TRUE')
+                //               ,'ac_no'          => $this->input->post('ac_no' , 'TRUE')
+                //               );
+
                 $i_data = array('fix_expns_srno' => $fix_expns_srno
                                ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
-                               ,'expns_group_no' => $this->input->post('expns_group_no' , 'TRUE')
+                               ,'trnsfr_day'     => $this->input->post('trnsfr_day'     , 'TRUE')
                                ,'expns_day'      => $this->input->post('expns_day'      , 'TRUE')
                                ,'expns_chnl_cls' => $this->input->post('expns_chnl_cls' , 'TRUE')
                                ,'sttlmt_yn'      => $sttlmt_yn
@@ -380,9 +395,24 @@ class Fix_expns extends CI_Controller
 
                 $fix_expns_srno = $this->uri->segment(3);
 
+                //2022.02.23. gruop_no 삭제, trnsfr_day 추가
+                //$u_data = array('fix_expns_srno' => $fix_expns_srno
+                //               ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
+                //               ,'expns_group_no' => $this->input->post('expns_group_no' , 'TRUE')
+                //               ,'expns_day'      => $this->input->post('expns_day'      , 'TRUE')
+                //               ,'expns_chnl_cls' => $expns_chnl_cls
+                //               ,'sttlmt_yn'    => $sttlmt_yn
+                //               ,'expns_cls'      => $expns_cls
+                //               ,'whr_to_buy'     => $whr_to_buy
+                //               ,'amt'            => $amt
+                //               ,'memo'           => $memo
+                //               ,'bank'           => $this->input->post('bank' , 'TRUE')
+                //               ,'ac_no'          => $this->input->post('ac_no' , 'TRUE')
+                //               );
+
                 $u_data = array('fix_expns_srno' => $fix_expns_srno
                                ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
-                               ,'expns_group_no' => $this->input->post('expns_group_no' , 'TRUE')
+                               ,'trnsfr_day'     => $this->input->post('trnsfr_day'     , 'TRUE')
                                ,'expns_day'      => $this->input->post('expns_day'      , 'TRUE')
                                ,'expns_chnl_cls' => $expns_chnl_cls
                                ,'sttlmt_yn'    => $sttlmt_yn
