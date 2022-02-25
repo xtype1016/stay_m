@@ -3623,11 +3623,14 @@ class Stay_m extends CI_Model
                        ,'memo'            => $arr_data['memo']
                        ,'bank'            => $arr_data['bank']
                        ,'ac_no'           => $arr_data['ac_no']
+                       ,'rel_ac_no'       => $arr_data['rel_ac_no']
                        ,'del_yn'          => 'N'
                        ,'mnpl_usr_no'     => $_SESSION['usr_no']
                        ,'mnpl_ip'         => $_SESSION['ip_addr']
                        ,'mnpl_ymdh'       => date("YmdHis")
                        );
+        
+        $i_data = array_filter($i_data);
 
         $result = $this->db->insert('tbb005l00', $i_data);
 
@@ -3652,6 +3655,7 @@ class Stay_m extends CI_Model
                           ,a.memo
                           ,a.bank
                           ,a.ac_no
+                          ,a.rel_ac_no
                           ");
         $this->db->from('tbb005l00  a');
         $this->db->where("a.db_no   = ", $_SESSION['db_no']);
@@ -3689,6 +3693,7 @@ class Stay_m extends CI_Model
                        ,'memo'            => $arr_data['memo']
                        ,'bank'            => $arr_data['bank']
                        ,'ac_no'           => $arr_data['ac_no']
+                       ,'rel_ac_no'       => $arr_data['rel_ac_no']
                        ,'del_yn'          => 'N'
                        ,'mnpl_usr_no'     => $_SESSION['usr_no']
                        ,'mnpl_ip'         => $_SESSION['ip_addr']
@@ -3738,6 +3743,7 @@ class Stay_m extends CI_Model
                           ,a.bank
                           ,d.clm_val_nm    bank_nm
                           ,a.ac_no
+                          ,a.rel_ac_no
                           ,row_number() over (PARTITION BY CONCAT(a.trnsfr_day, a.ac_no) ORDER BY a.trnsfr_day, a.ac_no, a.expns_day, a.fix_expns_srno)    rownum
                           ,count(a.fix_expns_srno) over (PARTITION BY  a.trnsfr_day, a.ac_no)  rowspan_val
                           ,sum(a.amt) over (PARTITION BY a.trnsfr_day, a.ac_no)               sum_amt
@@ -4307,6 +4313,7 @@ class Stay_m extends CI_Model
                        ,a.ac_owner
                        ,a.ac_owner_nm
                        ,a.ac_cls
+                       ,a.ac_cls_nm
                        ,a.balance
                  from  (select  a.ac_srno
                                ,a.ac_no
@@ -4315,6 +4322,7 @@ class Stay_m extends CI_Model
                                ,a.ac_owner
                                ,c.clm_val_nm   ac_owner_nm
                                ,a.ac_cls
+                               ,d.clm_val_nm   ac_cls_nm
                                ,a.amt
                                ,a.io_amt
                                ,sum(a.balance) balance
@@ -4370,7 +4378,7 @@ class Stay_m extends CI_Model
                                   from  tbb006i00  a
                                         left join
                                         (select  a.db_no
-                                		        ,a.memo      ac_no
+                                		        ,a.rel_ac_no ac_no
                                                 ,b.expns_dt
                                                 ,b.amt       saving_amt
                                            from  tbb005l00  a
@@ -4392,24 +4400,30 @@ class Stay_m extends CI_Model
                                 )  a
                                ,tba003i00  b
                                ,tba003i00  c
+                               ,tba003i00  d
                         where  b.db_no = ?
                           and  b.clm_nm = 'BANK'
                           and  b.clm_val = a.bank
                           and  c.db_no = b.db_no
                           and  c.clm_nm = 'USR'
                           and  c.clm_val = a.ac_owner
+                          and  d.db_no = '0000000000'
+                          and  d.clm_nm = 'AC_CLS'
+                          and  d.clm_val = a.ac_cls
                           group by  a.ac_srno
-                                                 ,a.ac_no
-                                                 ,a.bank
-                                                 ,b.clm_val_nm
-                                                 ,a.ac_owner
-                                                 ,c.clm_val_nm
-                                                 ,a.ac_cls
+                                   ,a.ac_no
+                                   ,a.bank
+                                   ,b.clm_val_nm
+                                   ,a.ac_owner
+                                   ,c.clm_val_nm
+                                   ,a.ac_cls
+                                   ,d.clm_val_nm
                                   with rollup
                        )  a
-               where  a.ac_cls is not null or ac_srno is null
-               order by  ifnull(a.ac_cls, '9')
-                        ,a.ac_srno";
+               where  a.ac_cls_nm is not null or ac_srno is NULL
+               order by ifnull(a.ac_owner, '99')
+                       ,a.ac_cls
+                       ,a.ac_srno";
 
         if (isset($limit) && isset($offset)) {
             $sql = $sql . " limit " .  $offset . ", " . $limit;

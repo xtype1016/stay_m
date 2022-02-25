@@ -1,5 +1,26 @@
 Development Memo
 
+#. 연계계좌 기능 추가
+	- 이체 계좌와 별개의 연계계좌 관리
+	- 주로 정기저축 계좌(입출금계좌에서 정기저축계좌로 자동이체되므로 이체는 입출금거래로 하나 최종거래는 저축계좌와 이루어짐)
+	- 고정지출 처리시 해당 계좌의 잔액 증가 처리
+
+ALTER TABLE `tbb005l00`
+	ADD COLUMN `REL_AC_NO` VARCHAR(20) NULL DEFAULT NULL COMMENT '연계계좌번호' AFTER `AC_NO`;
+
+ALTER TABLE `tbb001l00`
+	ADD COLUMN `AC_NO` VARCHAR(20) NULL DEFAULT NULL COMMENT '상대계좌번호' AFTER `FIX_EXPNS_SRNO`,
+	ADD COLUMN `REL_AC_NO` VARCHAR(20) NULL DEFAULT NULL COMMENT '연계계좌번호' AFTER `AC_NO`;
+
+
+	- fix_expns.php
+	- fix_expns_reg_v.php
+	- fix_expns_list_v.php
+	- Stay_m.php(insert_tbb005l00, get_fix_expns_info, update_tbb005l00_1, get_fix_expns_list, get_ac_bal)
+	-- 테스트
+	- FIX_EXPNS_TRANSCT
+
+=======================================================================================================================
 #. 고정지출 입력시 그룹 제거
     - 이체 일자와 연결계좌로 group by
 

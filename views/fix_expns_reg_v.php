@@ -211,6 +211,13 @@
                 </div>
 
                 <div class="form-group form-group-sm row">
+                    <label class="col-xs-4 control-label" for="rel_ac_no"><h6><strong>연계 계좌번호</h6></strong></label>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control" id="rel_ac_no" name="rel_ac_no" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { echo set_value('rel_ac_no'); } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('rel_ac_no', $view->rel_ac_no); } ?>" placeholder="">
+                    </div>
+                </div>
+
+                <div class="form-group form-group-sm row">
                     <div class="pull-right">
                         <?php if (strncmp($prcs_cls, 'i', 1) == 0) { ?>
                             <button type="submit" class="btn btn-primary btn-sm" id="ins" formaction="/fix_expns/ins">입력</button>

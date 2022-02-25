@@ -33,6 +33,7 @@ BEGIN
     DECLARE _memo           VARCHAR(50);
     DECLARE _bank           VARCHAR(2);
     DECLARE _ac_no          VARCHAR(20);
+    DECLARE _rel_ac_no      VARCHAR(20);
 
     DECLARE _amt            DOUBLE;
     /* 테이블의  컬럼값을 담을 변수 */
@@ -46,31 +47,43 @@ BEGIN
 
     /* 고정지출 리스트를 읽어오는 커서를 만든다. */
     DECLARE cur_fix_expns_list CURSOR FOR
-        SELECT  a.db_no, a.fix_expns_srno, a.expns_nm, a.sttlmt_yn, a.io_tr_cls, a.expns_chnl_cls, a.expns_cls, a.whr_to_buy, a.memo, a.bank, a.ac_no, a.amt
+        SELECT  a.db_no
+               ,a.fix_expns_srno
+               ,a.expns_nm
+               ,a.sttlmt_yn
+               ,a.io_tr_cls
+               ,a.expns_chnl_cls
+               ,a.expns_cls
+               ,a.whr_to_buy
+               ,a.memo
+               ,a.bank
+               ,a.ac_no
+               ,a.rel_ac_no
+               ,a.amt
           FROM  tbb005l00  a
-         WHERE  a.expns_day > (
-                                  SELECT  substr(z.bef_bsns_dt, 7, 2)
-                                    FROM  (
-                                           SELECT   a.dt        bef_bsns_dt
-                                                   ,a.dt_cls
-                                                   ,@rnum := @rnum + 1  rnum
-                                              FROM  tba004l00  a
-                                                   ,(
-                                                     select  @rnum := 0
-                                                    )  b
-                                              WHERE  a.dt >= date_format(adddate(str_to_date(_stnd_dt, '%Y%m%d'), -10), '%Y%m%d')
-                                                AND  a.dt <  _stnd_dt
-                                                AND  a.dt_cls = '1'
-                                              ORDER BY  a.dt  desc
-                                          )  z
-                                   WHERE  z.rnum = 1
-                              )
-           AND  a.expns_day <= (
-                                    SELECT  substr(z.dt, 7, 2)
-                                      FROM  tba004l00  z
-                                     WHERE  z.dt_cls = '1'
-                                       AND  z.dt = _stnd_dt
-                                )
+         WHERE  ifnull(a.trnsfr_day, a.expns_day) > (
+                                                     SELECT  substr(z.bef_bsns_dt, 7, 2)
+                                                       FROM  (
+                                                              SELECT   a.dt        bef_bsns_dt
+                                                                      ,a.dt_cls
+                                                                      ,@rnum := @rnum + 1  rnum
+                                                                 FROM  tba004l00  a
+                                                                      ,(
+                                                                        select  @rnum := 0
+                                                                       )  b
+                                                                 WHERE  a.dt >= date_format(adddate(str_to_date(_stnd_dt, '%Y%m%d'), -10), '%Y%m%d')
+                                                                   AND  a.dt <  _stnd_dt
+                                                                   AND  a.dt_cls = '1'
+                                                                 ORDER BY  a.dt  desc
+                                                             )  z
+                                                      WHERE  z.rnum = 1
+                                                    )
+           AND  ifnull(a.trnsfr_day, a.expns_day) <= (
+                                                      SELECT  substr(z.dt, 7, 2)
+                                                        FROM  tba004l00  z
+                                                       WHERE  z.dt_cls = '1'
+                                                         AND  z.dt = _stnd_dt
+                                                     )
            AND  a.del_yn = 'N';
 
     /* 커서 종료조건 : 더이상 없다면 종료 */
@@ -84,7 +97,19 @@ BEGIN
     OPEN cur_fix_expns_list;
 
     read_loop: LOOP
-        FETCH cur_fix_expns_list INTO _db_no, _fix_expns_srno, _expns_nm, _sttlmt_yn, _io_tr_cls, _expns_chnl_cls, _expns_cls, _whr_to_buy, _memo, _bank, _ac_no, _amt ;
+        FETCH cur_fix_expns_list INTO _db_no
+                                     ,_fix_expns_srno
+                                     ,_expns_nm
+                                     ,_sttlmt_yn
+                                     ,_io_tr_cls
+                                     ,_expns_chnl_cls
+                                     ,_expns_cls
+                                     ,_whr_to_buy
+                                     ,_memo
+                                     ,_bank
+                                     ,_ac_no
+                                     ,_rel_ac_no
+                                     ,_amt ;
 
         IF _done THEN
             INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('Done _prcs_cnt = ', IFNULL(_prcs_cnt, 'NULL')), NOW());
@@ -93,7 +118,6 @@ BEGIN
 
         SET _prcs_cnt = _prcs_cnt + 1;
 
-        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('Begin dbErr = ', IFNULL(dbErr, 'NULL')), NOW());
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_prcs_cnt = ', IFNULL(_prcs_cnt, 'NULL')), NOW());
 
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_sttlmt_yn = ', IFNULL(_sttlmt_yn, 'NULL')), NOW());
@@ -150,6 +174,14 @@ BEGIN
                 ,NOW()
                 );
 
+            IF dbErr < 0 THEN
+                ROLLBACK;
+            ELSE
+                COMMIT;
+            END IF;
+
+            INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('sttlmt dbErr = ', IFNULL(dbErr, 'NULL')), NOW());
+
             SET _sttlmt_prcs_cnt = _sttlmt_prcs_cnt + 1;
 
         /* 결제가 아닌 경우 지출 처리*/
@@ -179,6 +211,8 @@ BEGIN
                 ,SSAMZI_YN
                 ,COST_CLS
                 ,FIX_EXPNS_SRNO
+                ,AC_NO
+                ,REL_AC_NO
                 ,DEL_YN
                 ,MNPL_USR_NO
                 ,MNPL_IP
@@ -197,20 +231,24 @@ BEGIN
                    ,'N'
                    ,'1'
                    ,_fix_expns_srno
+                   ,_ac_no
+                   ,_rel_ac_no
                    ,'N'
                    ,'BATCH'
                    ,'FIX_EXPNS_TRNSCT'
                    ,NOW()
                    );
 
+            IF dbErr < 0 THEN
+                ROLLBACK;
+            ELSE
+                COMMIT;
+            END IF;
+
+            INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('expns dbErr = ', IFNULL(dbErr, 'NULL')), NOW());
+
             SET _expns_prcs_cnt = _expns_prcs_cnt + 1;
 
-        END IF;
-
-        IF dbErr < 0 THEN
-            ROLLBACK;
-        ELSE
-            COMMIT;
         END IF;
 
     END LOOP;

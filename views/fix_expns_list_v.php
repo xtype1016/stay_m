@@ -78,10 +78,11 @@
                 -->
                 <th style="text-align: center"><h5>이체일</h5></th>
                 <th style="text-align: center"><h5>지출일</h5></th>
-                <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>연결은행</h5></th> <?php } ?>
-                <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>연결계좌</h5></th> <?php } ?>
-                <th style="text-align: center"><h5>매체</h5></th>
-                <th style="text-align: center"><h5>분류</h5></th>
+                <th style="text-align: center"><h5>상대은행</h5></th>
+                <th style="text-align: center"><h5>상대계좌</h5></th>
+                <th style="text-align: center"><h5>연계계좌</h5></th>
+                <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>매체</h5></th> <?php } ?>
+                <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>분류</h5></th> <?php } ?>
                 <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>구입처</h5></th> <?php } ?>
                 <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>메모</h5></th> <?php } ?>
                 <th style="text-align: center"><h5>금액</h5></th>
@@ -102,16 +103,14 @@
             ?>
             <tr>
                 <td align="center"><a href="/fix_expns/upd/<?php echo $e_list->fix_expns_srno; ?>"><h6><?php echo $e_list->expns_nm;?></h6></a></td>
-                <!--
-                <td align="center"><h6><?php echo $e_list->expns_group_no;?></h6></td>
-                -->
                 <td align="center"><h6><?php echo $e_list->trnsfr_day;?></h6></td>
                 <td align="center"><h6><?php echo $e_list->expns_day;?></h6></td>
-                <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->bank_nm;?></h6></td> <?php } ?>
-                <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->ac_no;?></h6></td> <?php } ?>
-                <td align="center"><h6><?php echo $e_list->expns_chnl_cls_nm;?></h6></td>
-                <td align="center"><h6><?php echo $e_list->expns_cls_nm;?></h6></td>
-                <?php if (!$this->agent->is_mobile()) { ?><td align="center"><h6><?php echo $e_list->whr_to_buy;?></h6></td> <?php } ?>
+                <td align="center"><h6><?php echo $e_list->bank_nm;?></h6></td>
+                <td align="center"><h6><?php echo $e_list->ac_no;?></h6></td>
+                <td align="center"><h6><?php echo $e_list->rel_ac_no;?></h6></td>
+                <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->expns_chnl_cls_nm;?></h6></td> <?php } ?>
+                <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->expns_cls_nm;?></h6></td> <?php } ?>
+                <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->whr_to_buy;?></h6></td> <?php } ?>
                 <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->memo;?></h6></td> <?php } ?>
                 <td align="right"><h6><?php echo number_format($e_list->amt);?></h6></td>
                 <?php
@@ -127,7 +126,7 @@
                 }
                  ?>
                     <tr>
-                    <td align="right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '6'; } } else { if (strncmp($view_cls, "1", 1) == 0) { echo '9'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '10'; } } ?>><h5>합 계</h5></td>
+                    <td align="right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '7'; } } else { if (strncmp($view_cls, "1", 1) == 0) { echo '10'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '11'; } } ?>><h5>합 계</h5></td>
                     <td align="right"><h5><?php echo number_format($total_sum);?></h5></td>
                     </tr>
                 <?php
@@ -139,11 +138,11 @@
         <tfoot>
             <tr>
                 <!--
-                <th colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '6'; } } else if (strncmp($view_cls, "1", 1) == 0) { echo '9'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '10'; }?>  style="vertical-align: middle; text-align: left">
+                <th colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '7'; } } else if (strncmp($view_cls, "1", 1) == 0) { echo '9'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '11'; }?>  style="vertical-align: middle; text-align: left">
                     <?php echo $pagination; ?>
                 </th>
                 -->
-                <th style="vertical-align: middle; text-align: right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '6'; } else { echo '7'; } } else if (strncmp($view_cls, "1", 1) == 0) { echo '10'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '11'; }?>  style="vertical-align: middle; text-align: left">
+                <th style="vertical-align: middle; text-align: right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '7'; } } else if (strncmp($view_cls, "1", 1) == 0) { echo '11'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '12'; }?>  style="vertical-align: middle; text-align: left">
                     <a href="/fix_expns/ins" class="btn btn-primary btn-sm">입력</a>
                 </th>
             </tr>

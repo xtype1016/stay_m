@@ -221,11 +221,48 @@ class Fix_expns extends CI_Controller
                 }
                 //지출 채널, 출금여부 정합성 체크 End
 
+
+                if (strlen($this->input->post('trnsfr_day', 'TRUE')) > 0)
+                {
+                    $trnsfr_day = trim($this->input->post('trnsfr_day', 'TRUE'));
+                }
+                else
+                {
+                    $trnsfr_day = NULL;
+                }
+
+                if (strlen($this->input->post('bank', 'TRUE')) > 0)
+                {
+                    $bank = trim($this->input->post('bank', 'TRUE'));
+                }
+                else
+                {
+                    $bank = NULL;
+                }
+
+                if (strlen($this->input->post('ac_no', 'TRUE')) > 0)
+                {
+                    $ac_no = trim($this->input->post('ac_no', 'TRUE'));
+                }
+                else
+                {
+                    $ac_no = NULL;
+                }
+
+                if (strlen($this->input->post('rel_ac_no', 'TRUE')) > 0)
+                {
+                    $rel_ac_no = trim($this->input->post('rel_ac_no', 'TRUE'));
+                }
+                else
+                {
+                    $rel_ac_no = NULL;
+                }
+
                 $this->db->trans_begin();
 
                 $fix_expns_srno = $this->stay_m->get_clm_sr_val('FIX_EXPNS_SRNO');
 
-                //2022.02.23. group_no 삭제, trnsfr_day 추가
+                //2022.02.23. group_no 삭제, trnsfr_day, rel_ac_no 추가
                 //$i_data = array('fix_expns_srno' => $fix_expns_srno
                 //               ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
                 //               ,'expns_group_no' => $this->input->post('expns_group_no' , 'TRUE')
@@ -242,7 +279,7 @@ class Fix_expns extends CI_Controller
 
                 $i_data = array('fix_expns_srno' => $fix_expns_srno
                                ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
-                               ,'trnsfr_day'     => $this->input->post('trnsfr_day'     , 'TRUE')
+                               ,'trnsfr_day'     => $trnsfr_day
                                ,'expns_day'      => $this->input->post('expns_day'      , 'TRUE')
                                ,'expns_chnl_cls' => $this->input->post('expns_chnl_cls' , 'TRUE')
                                ,'sttlmt_yn'      => $sttlmt_yn
@@ -250,8 +287,9 @@ class Fix_expns extends CI_Controller
                                ,'whr_to_buy'     => $whr_to_buy
                                ,'amt'            => $amt
                                ,'memo'           => $memo
-                               ,'bank'           => $this->input->post('bank' , 'TRUE')
-                               ,'ac_no'          => $this->input->post('ac_no' , 'TRUE')
+                               ,'bank'           => $bank
+                               ,'ac_no'          => $ac_no
+                               ,'rel_ac_no'      => $rel_ac_no
                                );
 
                 $result = $this->stay_m->insert_tbb005l00($i_data);
@@ -391,11 +429,20 @@ class Fix_expns extends CI_Controller
                 }
                 //지출 채널, 출금여부 정합성 체크 End
 
+                if (strlen($this->input->post('trnsfr_day', 'TRUE')) > 0)
+                {
+                    $trnsfr_day = trim($this->input->post('trnsfr_day', 'TRUE'));
+                }
+                else
+                {
+                    $trnsfr_day = NULL;
+                }
+
                 $this->db->trans_begin();
 
                 $fix_expns_srno = $this->uri->segment(3);
 
-                //2022.02.23. gruop_no 삭제, trnsfr_day 추가
+                //2022.02.23. gruop_no 삭제, trnsfr_day, rel_ac_no 추가
                 //$u_data = array('fix_expns_srno' => $fix_expns_srno
                 //               ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
                 //               ,'expns_group_no' => $this->input->post('expns_group_no' , 'TRUE')
@@ -412,7 +459,7 @@ class Fix_expns extends CI_Controller
 
                 $u_data = array('fix_expns_srno' => $fix_expns_srno
                                ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
-                               ,'trnsfr_day'     => $this->input->post('trnsfr_day'     , 'TRUE')
+                               ,'trnsfr_day'     => $trnsfr_day
                                ,'expns_day'      => $this->input->post('expns_day'      , 'TRUE')
                                ,'expns_chnl_cls' => $expns_chnl_cls
                                ,'sttlmt_yn'    => $sttlmt_yn
@@ -422,6 +469,7 @@ class Fix_expns extends CI_Controller
                                ,'memo'           => $memo
                                ,'bank'           => $this->input->post('bank' , 'TRUE')
                                ,'ac_no'          => $this->input->post('ac_no' , 'TRUE')
+                               ,'rel_ac_no'      => $this->input->post('rel_ac_no' , 'TRUE')
                                );
 
                 $result = $this->stay_m->update_tbb005l00_1($u_data);

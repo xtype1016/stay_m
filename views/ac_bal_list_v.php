@@ -58,6 +58,7 @@
                     <th style="text-align: center"><h5>은행</h5></th>
                     <th style="text-align: center"><h5>계좌번호</h5></th>
                     <th style="text-align: center"><h5>계좌주</h5></th>
+                    <th style="text-align: center"><h5>계좌구분</h5></th>
                     <th style="text-align: center"><h5>잔액</h5></th>
                 </tr>
             </thead>
@@ -70,13 +71,14 @@
                 <tr>
 
                     <?php if (strlen($a_list->bank_nm) == 0) { ?>
-                    <td colspan="3" align="center"><h6><?php echo "합  계"; ?></h6></td>
+                    <td colspan="4" align="center"><h6><?php echo "합  계"; ?></h6></td>
                     <td align="right"><h6><?php echo number_format($a_list->balance);?></h6></td>
 
                     <?php } else { ?>
                     <td align="center"><h6><?php echo $a_list->bank_nm;?></h6></td>
                     <td align="center"><h6><?php echo $a_list->ac_no;?></h6></td>
                     <td align="center"><h6><?php echo $a_list->ac_owner_nm;?></h6></td>
+                    <td align="center"><h6><?php echo $a_list->ac_cls_nm;?></h6></td>
                     <td align="right"><h6><?php echo number_format($a_list->balance);?></h6></td>
                     <?php } ?>
                 </tr>
@@ -87,7 +89,7 @@
 
             <tfoot>
                 <tr>
-                    <th colspan= "4" style="vertical-align: middle; text-align: left">
+                    <th colspan= "5" style="vertical-align: middle; text-align: left">
                         <?php echo $pagination; ?>
                     </th>
                     <!--
