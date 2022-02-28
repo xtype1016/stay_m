@@ -104,18 +104,6 @@
                     </div>
                 </div>
 
-<!--
-                <div class="form-group form-group-sm row">
-                    <label class="col-xs-4 control-label" for="expns_group_no"><h6><strong>지출그룹번호</h6></strong></label>
-                    <div class="col-xs-8">
-                        <select class="form-control" id="expns_group_no" name="expns_group_no">
-                            <?php for($i = 1; $i <= 10; $i++) { if (isset($view) && $i == $view->expns_group_no) { $selected = TRUE; } else { $selected = FALSE; } ?>
-                                <option value="<?php echo $i ?>" <?php echo set_select('expns_group_no', $i, $selected)?>><?php echo $i ?></option>
-                            <?php }; ?>
-                        </select>
-                    </div>
-                </div>
--->
                 <div class="form-group form-group-sm row">
                     <label class="col-xs-4 control-label" for="sttlmt_yn"><h6><strong>결제여부</h6></strong></label>
                     <div class="col-xs-8">
@@ -166,7 +154,7 @@
                 <div class="form-group form-group-sm row">
                     <label class="col-xs-4 control-label" for="expns_cls"><h6><strong>지출분류</h6></strong></label>
                     <div class="col-xs-8">
-                        <?php echo form_dropdown('expns_cls', $expns_cls_list, '', 'class="form-control" id="expns_cls"'); ?>
+                        <?php if (isset($view)) { echo form_dropdown('expns_cls', $expns_cls_list, $view->expns_cls, 'class="form-control" id="expns_cls"'); } else { echo form_dropdown('expns_cls', $expns_cls_list, '', 'class="form-control" id="expns_cls"'); } ?>
                     </div>
                 </div>
 

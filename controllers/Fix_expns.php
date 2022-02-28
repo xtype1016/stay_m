@@ -372,6 +372,11 @@ class Fix_expns extends CI_Controller
                 $expns_chnl_cls = $this->input->post('expns_chnl_cls' , 'TRUE');
                 $expns_cls = $this->input->post('expns_cls'      , 'TRUE');
 
+                if (strcmp($expns_cls, 'NULL') == 0)
+                {
+                    $expns_cls = NULL;
+                }
+
                 if (strlen($this->input->post('whr_to_buy', 'TRUE')) > 0)
                 {
                     $whr_to_buy = $this->input->post('whr_to_buy', 'TRUE');
@@ -584,6 +589,9 @@ class Fix_expns extends CI_Controller
         $expns_cls_result = $this->stay_m->get_list('EXPNS_CLS');
 
         $i = -1;
+        
+        $expns_cls['선택없음']['NULL'] = '선택없음';
+
         foreach($expns_cls_result as $e_cls_list)
         {
             if (!isset($e_cls_list->othr_info))

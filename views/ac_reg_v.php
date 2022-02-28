@@ -58,45 +58,45 @@
         return `0${value}`;
     }
 
-    function changecls(){
-        var cls_Select = document.getElementById("ac_cls");
-
-        // select element에서 선택된 option의 value가 저장된다.
-        var cls_Value = cls_Select.options[cls_Select.selectedIndex].value;
-
-        // select element에서 선택된 option의 text가 저장된다.
-        var cls_Text = cls_Select.options[cls_Select.selectedIndex].text;
-
-        if (cls_Value == "1")
-        {
-            var now = new Date();
-            var yr = now.getFullYear()
-            var mon = leftPad(now.getMonth() + 1);
-            var dt = leftPad(now.getDate());
-
-            var stnd_dt = yr + '-' + mon + '-' + dt;
-
-            $("input[type=text][name=srt_dt]").val(stnd_dt);
-            $("input[type=text][name=end_dt]").val("9999-12-31");
-            //$("#srt_dt").attr('disabled', 'true');
-            $("#end_dt").attr('disabled', 'true');
-        }
-        else
-        {
-            $("#srt_dt").removeAttr('disabled');
-            $("#end_dt").removeAttr('disabled');
-
-            var now = new Date();
-            var yr = now.getFullYear()
-            var mon = leftPad(now.getMonth() + 1);
-            var dt = leftPad(now.getDate());
-
-            var stnd_dt = yr + '-' + mon + '-' + dt;
-
-            $("input[type=text][name=srt_dt]").val(stnd_dt);
-            $("input[type=text][name=end_dt]").val(stnd_dt);
-        }
-    }
+    //function changecls(){
+    //    var cls_Select = document.getElementById("ac_cls");
+//
+    //    // select element에서 선택된 option의 value가 저장된다.
+    //    var cls_Value = cls_Select.options[cls_Select.selectedIndex].value;
+//
+    //    // select element에서 선택된 option의 text가 저장된다.
+    //    var cls_Text = cls_Select.options[cls_Select.selectedIndex].text;
+//
+    //    if (cls_Value == "1")
+    //    {
+    //        var now = new Date();
+    //        var yr = now.getFullYear()
+    //        var mon = leftPad(now.getMonth() + 1);
+    //        var dt = leftPad(now.getDate());
+//
+    //        var stnd_dt = yr + '-' + mon + '-' + dt;
+//
+    //        $("input[type=text][name=srt_dt]").val(stnd_dt);
+    //        $("input[type=text][name=end_dt]").val("9999-12-31");
+    //        //$("#srt_dt").attr('disabled', 'true');
+    //        $("#end_dt").attr('disabled', 'true');
+    //    }
+    //    else
+    //    {
+    //        $("#srt_dt").removeAttr('disabled');
+    //        $("#end_dt").removeAttr('disabled');
+//
+    //        var now = new Date();
+    //        var yr = now.getFullYear()
+    //        var mon = leftPad(now.getMonth() + 1);
+    //        var dt = leftPad(now.getDate());
+//
+    //        var stnd_dt = yr + '-' + mon + '-' + dt;
+//
+    //        $("input[type=text][name=srt_dt]").val(stnd_dt);
+    //        $("input[type=text][name=end_dt]").val(stnd_dt);
+    //    }
+    //}
 
 
 </script>
@@ -195,7 +195,7 @@
                         <input type="text" class="form-control" id="srt_dt" name="srt_dt" autocomplete="off" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { if (strcmp($ac_cls, '1') == 0) { echo $stnd_dt; } else { echo set_value('srt_dt', $stnd_dt); } } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('srt_dt', $view->srt_dt); } ?>" >
                     </div>
                     <div class="col-xs-4">
-                        <input type="text" class="form-control" id="end_dt" name="end_dt" autocomplete="off" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { if (strcmp($ac_cls, '1') == 0) { echo '9999-12-31'; } else { echo set_value('srt_dt', $stnd_dt); } } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('end_dt', $view->end_dt); } ?>" <?php if (strcmp($ac_cls, '1') == 0) {echo 'disabled';} ?> >
+                        <input type="text" class="form-control" id="end_dt" name="end_dt" autocomplete="off" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { if (strcmp($ac_cls, '1') == 0) { echo '9999-12-31'; } else { echo set_value('srt_dt', $stnd_dt); } } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('end_dt', $view->end_dt); } ?>" >
                     </div>
                 </div>
 

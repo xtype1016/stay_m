@@ -3649,7 +3649,7 @@ class Stay_m extends CI_Model
                           ,a.expns_day
                           ,a.expns_chnl_cls
                           ,a.sttlmt_yn
-                          ,a.expns_cls
+                          ,ifnull(a.expns_cls, 'NULL')   expns_cls
                           ,a.whr_to_buy
                           ,a.amt
                           ,a.memo
@@ -3736,7 +3736,7 @@ class Stay_m extends CI_Model
                           ,a.expns_chnl_cls
                           ,b.clm_val_nm    expns_chnl_cls_nm
                           ,a.expns_cls
-                          ,c.clm_val_nm    expns_cls_nm
+                          ,ifnull(c.clm_val_nm, '선택없음')    expns_cls_nm
                           ,a.whr_to_buy
                           ,a.amt
                           ,a.memo
@@ -4373,14 +4373,13 @@ class Stay_m extends CI_Model
                                        ,a.ac_owner
                                        ,a.ac_cls
                                        ,a.amt
-                                       ,ifnull(sum(c.saving_amt), 0)           io_amt
-                                       ,a.amt + ifnull(sum(c.saving_amt), 0)   balance
+                                       ,ifnull(c.saving_amt, 0)           io_amt
+                                       ,a.amt + ifnull(c.saving_amt, 0)   balance
                                   from  tbb006i00  a
                                         left join
                                         (select  a.db_no
-                                		        ,a.rel_ac_no ac_no
-                                                ,b.expns_dt
-                                                ,b.amt       saving_amt
+                                		        ,a.rel_ac_no
+                                                ,sum(b.amt)       saving_amt
                                            from  tbb005l00  a
                                                 ,tbb001l00  b
                                           where  a.db_no = ?
@@ -4389,14 +4388,12 @@ class Stay_m extends CI_Model
                                             and  b.db_no = a.db_no
                                             and  b.expns_cls = a.expns_cls
                                             and  b.fix_expns_srno = a.fix_expns_srno
-                                            and  b.del_yn = 'N')  c on c.db_no = a.db_no and c.ac_no = a.ac_no and c.expns_dt > a.srt_dt and c.expns_dt <= ?
+                                            and  b.del_yn = 'N'
+                                          group by  a.db_no
+                                                   ,a.rel_ac_no)  c on c.db_no = a.db_no and c.rel_ac_no = a.ac_no
                                  where  a.ac_cls = '3'
                                    and  a.srt_dt <= ?
                                    and  a.del_yn = 'N'
-                                 group by  a.ac_srno
-                                          ,a.ac_no
-                                          ,a.ac_cls
-                                          ,a.amt
                                 )  a
                                ,tba003i00  b
                                ,tba003i00  c
@@ -4435,7 +4432,6 @@ class Stay_m extends CI_Model
                                              ,$_SESSION['db_no']
                                              ,$stnd_dt
                                              ,$_SESSION['db_no']
-                                             ,$stnd_dt
                                              ,$stnd_dt
                                              ,$_SESSION['db_no'] ));
 
