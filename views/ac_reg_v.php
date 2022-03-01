@@ -214,6 +214,7 @@
                 </div>
 
                 <input type="hidden" name="ac_srno" value="<?php if (isset($view) && strncmp($prcs_cls, 'u', 1) == 0) { echo $view->ac_srno; } else { echo ''; } ?>" >
+                <input type="hidden" name="ori_primary_yn" value="<?php if (isset($view) && strncmp($prcs_cls, 'u', 1) == 0) { echo $view->primary_yn; } else { echo ''; } ?>" >
 
                 <div class="form-group form-group-sm row">
                     <div class="pull-right">

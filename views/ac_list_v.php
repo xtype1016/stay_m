@@ -42,10 +42,10 @@
         <table cellspacing="0" cellpadding="0" class="table table-striped table-condensed">
             <thead>
                 <tr>
-                    <th style="text-align: center"><h5>계좌번호</h5></th>
-                    <th style="text-align: center"><h5>은행명</h5></th>
                     <th style="text-align: center"><h5>계좌주</h5></th>
                     <th style="text-align: center"><h5>계좌구분</h5></th>
+                    <th style="text-align: center"><h5>은행명</h5></th>
+                    <th style="text-align: center"><h5>계좌번호</h5></th>
                 </tr>
             </thead>
 
@@ -55,10 +55,10 @@
                     {
                 ?>
                 <tr>
+                    <td align="center"><h6><?php echo $a_list->ac_owner;?></h6></td>
+                    <td align="center"><h6><?php echo $a_list->ac_cls_nm;?></h6></td>
+                    <td align="center"><h6><?php echo $a_list->bank_nm;?></h6></td>
                     <td align="center"><a href="/asset/ac_upd/<?php echo $a_list->ac_srno; ?>"><h6><?php echo $a_list->ac_no;?></h6></a></td>
-                    <td align="left"><h6><?php echo $a_list->bank_nm;?></h6></td>
-                    <td align="left"><h6><?php echo $a_list->ac_owner;?></h6></td>
-                    <td align="center"><h6><?php echo $a_list->ac_cls;?></h6></td>
                 </tr>
                 <?php
                     } }

@@ -337,8 +337,11 @@ class Asset extends CI_Controller
                 }
 
                 $primary_yn = $this->input->post('primary_yn', 'TRUE');
+                $ori_primary_yn = $this->input->post('ori_primary_yn', 'TRUE');
+                
+                info_log("asset/ac_ins/", "ori_primary_yn = [" . $ori_primary_yn . "]");
 
-                if (strcmp($primary_yn, 'Y') == 0) {
+                if (strcmp($ori_primary_yn, 'N') == 0 && strcmp($primary_yn, 'Y') == 0) {
                     $dup_chk = $this->stay_m->get_ac_primary_dup_chk();
 
                     info_log("asset/ac_ins/", "dup_chk cnt = [" . $dup_chk->cnt . "]");

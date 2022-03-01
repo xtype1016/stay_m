@@ -4183,11 +4183,13 @@ class Stay_m extends CI_Model
         $db_no = array('0000000000', $_SESSION['db_no']);
 
         $this->db->select("a.ac_srno
-                          ,a.ac_no
+                          ,a.ac_owner
+                          ,b.clm_val_nm    ac_owner
+                          ,a.ac_cls
+                          ,c.clm_val_nm    ac_cls_nm
                           ,a.bank
                           ,d.clm_val_nm    bank_nm
-                          ,b.clm_val_nm    ac_owner
-                          ,c.clm_val_nm    ac_cls
+                          ,a.ac_no
                           ,a.primary_yn
                           ,concat(substr(a.srt_dt, 1, 4), '-', substr(a.srt_dt, 5, 2), '-', substr(a.srt_dt, 7, 2))  srt_dt
                           ,concat(substr(a.end_dt, 1, 4), '-', substr(a.end_dt, 5, 2), '-', substr(a.end_dt, 7, 2))  end_dt
@@ -4209,7 +4211,7 @@ class Stay_m extends CI_Model
         $this->db->where_in("d.db_no", $db_no);
         $this->db->where("d.clm_nm = 'BANK'");
         $this->db->where("d.clm_val = a.bank");
-        $this->db->order_by("a.ac_srno");
+        $this->db->order_by("a.ac_owner, a.ac_cls, a.bank, a.ac_no");
 
         if (isset($limit) && isset($offset)) {
             $this->db->limit($limit, $offset);
