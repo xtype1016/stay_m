@@ -3275,6 +3275,7 @@ class Stay_m extends CI_Model
                        ,'io_tr_cls'    => $arr_data['io_tr_cls']
                        ,'memo'         => $arr_data['memo']
                        ,'amt'          => $arr_data['amt']
+                       ,'del_yn'       => 'N'
                        ,'mnpl_usr_no'  => $_SESSION['usr_no']
                        ,'mnpl_ip'      => $_SESSION['ip_addr']
                        ,'mnpl_ymdh'    => date("YmdHis")
@@ -4344,7 +4345,7 @@ class Stay_m extends CI_Model
                                 		        ,case when a.io_tr_cls like '1%' then a.amt end  in_amt
                                                 ,case when a.io_tr_cls like '2%' then a.amt end  out_amt
                                          from  tbb003l00  a
-                                        where  a.del_yn = 'N')  b  on b.db_no = a.db_no and b.dt > a.srt_dt and b.dt <= ?
+                                        where  a.del_yn = 'N')  b  on b.db_no = a.db_no and b.dt >= a.srt_dt and b.dt <= ?
                                  where  a.db_no = ?
                                    and  a.ac_cls = '1'
                                    and  a.srt_dt <= ?

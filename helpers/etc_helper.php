@@ -444,6 +444,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $cur_io_tr_srno     = $result->cur_io_tr_srno    ;
         $last_dt            = $result->last_dt           ;
 
+        $stnd_dt = date("Ymd");
+
         info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cash_expns_amt      = [" . $cash_expns_amt     . "]");
         info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cur_cash_expns_amt  = [" . $cur_cash_expns_amt . "]");
         info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cur_io_tr_srno      = [" . $cur_io_tr_srno . "]");
@@ -456,10 +458,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             $io_tr_srno = $CI->stay_m->get_clm_sr_val('IO_TR_SRNO');
 
-            info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "io_tr_srno             = [" . $io_tr_srno            . "]");
+            info_log("etc_helper/cash_bal_ins_upd/insert", "io_tr_srno             = [" . $io_tr_srno            . "]");
+
+            // 2022.03.11. dt 월말일자에서 조회일 현재일자로 변경
+            //$i_data = array('io_tr_srno' => $io_tr_srno
+            //               ,'dt'         => $last_dt
+            //               ,'io_tr_cls'  => '201'
+            //               ,'memo'       => NULL
+            //               ,'amt'        => $cash_expns_amt
+            //               );
 
             $i_data = array('io_tr_srno' => $io_tr_srno
-                           ,'dt'         => $last_dt
+                           ,'dt'         => $stnd_dt
                            ,'io_tr_cls'  => '201'
                            ,'memo'       => NULL
                            ,'amt'        => $cash_expns_amt
@@ -485,12 +495,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             // update
             $CI->db->trans_begin();
 
+            info_log("etc_helper/cash_bal_ins_upd/update", "io_tr_srno             = [" . $cur_io_tr_srno            . "]");
+
+            // 2022.03.11. dt 월말일자에서 조회일 현재일자로 변경
+            //            $u_data = array('io_tr_srno' => $cur_io_tr_srno
+            //                           ,'dt'         => $last_dt
+            //                           ,'io_tr_cls'  => '201'
+            //                           ,'memo'       => NULL
+            //                           ,'amt'        => $cash_expns_amt
+            //                           );
+
             $u_data = array('io_tr_srno' => $cur_io_tr_srno
-                        ,'dt'         => $last_dt
-                        ,'io_tr_cls'  => '201'
-                        ,'memo'       => NULL
-                        ,'amt'        => $cash_expns_amt
-                        );
+                           ,'dt'         => $stnd_dt
+                           ,'io_tr_cls'  => '201'
+                           ,'memo'       => NULL
+                           ,'amt'        => $cash_expns_amt
+                           );
 
             $result = $CI->stay_m->update_tbb003l00_1($u_data);
 
