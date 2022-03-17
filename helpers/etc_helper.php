@@ -296,7 +296,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         $event = new Google_Service_Calendar_Event(array(
                                                                         'summary' => $summary,
                                                                         'start'   => array('date' => $rsvt_info->stnd_srt_dt,),
-                                                                        'end'     => array('date' => $rsvt_info->g_end_dt,),
+                                                                        'end'     => array('date' => $rsvt_info->stnd_g_end_dt,),
                                                                         )
                                                                   );
 
