@@ -1032,7 +1032,7 @@ class Stay_m extends CI_Model
                           ,concat(substr(a.srt_dt, 1, 4), '-', substr(a.srt_dt, 5, 2), '-', substr(a.srt_dt, 7, 2))  stnd_srt_dt
                           ,a.end_dt
                           ,concat(substr(a.end_dt, 1, 4), '-', substr(a.end_dt, 5, 2), '-', substr(a.end_dt, 7, 2))  stnd_end_dt
-                          ,adddate(a.end_dt, 1)                                                                      g_end_dt
+                          ,adddate(a.end_dt, 1)                                                                      stnd_g_end_dt
                           ,a.gst_no
                           ,b.gst_nm
                           ,a.amt
@@ -4457,6 +4457,64 @@ class Stay_m extends CI_Model
         return $result;
     }
 
+
+    public function get_continue_rsvt_yn($rsv_srno)
+    {
+        // 2022.03.17. 예약연장 예약건 여부 확인
+        $sql = "SELECT  concat(substr(a.cnfm_dt, 5, 2), '/', substr(a.cnfm_dt, 7, 2))  stnd_cnfm_dt
+                       ,truncate(a.amt / 10000, 0) amt
+                       ,a.hsrm_cls
+                       ,b.srt_dt
+                       ,a.end_dt
+                       ,concat(substr(b.srt_dt, 1, 4), '-', substr(b.srt_dt, 5, 2), '-', substr(b.srt_dt, 7, 2))  stnd_srt_dt
+                       ,concat(substr(a.g_end_dt, 1, 4), '-', substr(a.g_end_dt, 5, 2), '-', substr(a.g_end_dt, 7, 2))  stnd_g_end_dt
+                       ,DATEDIFF(a.g_end_dt, a.srt_dt)  stay_cnt
+                  FROM  (SELECT  db_no
+                                ,cnfm_dt
+                                ,gst_no
+                                ,hsrm_cls
+                                ,srt_dt
+                                ,end_dt
+                                ,date_format(adddate(srt_dt, -1), '%Y%m%d')  bef_end_dt
+                                ,date_format(ADDDATE(end_dt,  1), '%Y%m%d')  g_end_dt
+                                ,amt
+                           FROM  tba005l00
+                          WHERE  db_no = ?
+                            AND  rsv_srno = ?
+                        )  a
+                        ,tba005l00  b
+                  WHERE  b.db_no = a.db_no
+                    AND  b.gst_no = a.gst_no
+                    AND  b.hsrm_cls = a.hsrm_cls
+                    AND  b.end_dt = a.bef_end_dt";
+
+        $query = $this->db->query($sql, array($_SESSION['db_no']
+                                            , $rsv_srno));
+
+        //$result = $query->result();  // 객체 $result->board_id
+        //$result = $query->result_array();  //배열 $result['board_id']
+        $result = $query->row();  // 단건, 객체 $result->board_id
+
+        info_log("get_continue_rsvt_yn", "query_cnt = " . $query->num_rows());
+
+        if ($query->num_rows() == 0)
+        {
+            info_log("get_ac_list", "No Data Found!");
+            return;
+        }
+        else
+        {
+            if (!$result) {
+                info_log("get_continue_rsvt_yn", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("get_continue_rsvt_yn", "[SQL ERR] 예약 연장 여부 체크 SQL 오류!");
+            } else {
+                info_log("get_continue_rsvt_yn", "rsv_srno = " . $rsv_srno);
+                info_log("get_continue_rsvt_yn", "query_cnt = " . $query->num_rows());
+            }
+        }
+
+        return $result;
+    }
 
     /*=====================================================================================================================*/
     /* staym REST Api

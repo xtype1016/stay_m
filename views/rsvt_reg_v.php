@@ -287,6 +287,7 @@
                             <button type="submit" class="btn btn-primary btn-sm" id="upd" formaction="<?php echo '/rsvt/upd/' . $this->uri->segment(3); ?>">예약수정</button>
                             <a href="<?php echo '/etc_incm/ins/' . $this->uri->segment(3); ?>" class="btn btn-default btn-sm">기타거래</a>
                             <a href="<?php echo '/rsvt/cncl/' . $this->uri->segment(3); ?>" class="btn btn-warning btn-sm">예약취소</a>
+                            <a href="<?php echo '/rsvt/cnfm_msg/' . $this->uri->segment(3); ?>" class="btn btn-default btn-sm">예약확인</a>
                         <?php } else if (strncmp($prcs_cls, 'u', 1) == 0 && strncmp($view->cncl_yn, 'Y', 1) == 0) { ?>
                             <!--
                             <button type="submit" class="btn btn-primary btn-sm" id="upd" formaction="<?php echo '/rsvt/upd/' . $this->uri->segment(3); ?>">예약수정</button>

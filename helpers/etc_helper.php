@@ -546,4 +546,82 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         return;
     }
 
+
+    function rsv_term_msg($hsrm_cls, $srt_dt, $end_dt, $stnd_srt_dt, $stnd_g_end_dt)
+    {
+        $CI =& get_instance();
+
+        info_log("rsv_term_msg/", "================================================================================");
+        info_log("rsv_term_msg/", "예약 기간 메시지 처리 Begin!");
+
+        info_log("etc_helper/rsv_term_msg/", "hsrm_cls      = [" . $hsrm_cls . "]");
+        info_log("etc_helper/rsv_term_msg/", "srt_dt        = [" . $srt_dt . "]");
+        info_log("etc_helper/rsv_term_msg/", "end_dt        = [" . $end_dt . "]");
+        info_log("etc_helper/rsv_term_msg/", "stnd_srt_dt   = [" . $stnd_srt_dt . "]");
+        info_log("etc_helper/rsv_term_msg/", "stnd_g_end_dt = [" . $stnd_g_end_dt . "]");
+
+        $term_info = $CI->stay_m->get_rsv_term($hsrm_cls, $srt_dt, $end_dt, 'Y');
+
+        $loop_times = 0;
+        $loop_cnt = 0;
+        foreach ($term_info as $term_i)
+        {
+            $loop_cnt = $loop_cnt + 1;
+
+            //info_log("rsvt/prc", "dayofweek      = [" . $term_i->dayofweek . "]"     , $log_lvl);
+
+            if ($loop_cnt == 1)
+            {
+                $begin_dayofweek = $term_i->dayofweek;
+
+                // 2021.05.05. 1박 등록을 위해 시작일과 종료일이 동일한 경우 처리
+                if (strcmp($srt_dt, $end_dt) == 0)
+                {
+                    $end_dayofweek = $term_i->dayofweek;
+                }
+            }
+            else if (strcmp($end_dt, $term_i->dt) == 0)
+            {
+                $end_dayofweek = $term_i->dayofweek;
+            }
+        }
+
+        info_log("rsvt/cnfm_msg/", "begin_dayofweek      = [" . $begin_dayofweek . "]");
+        info_log("rsvt/cnfm_msg/", "end_dayofweek        = [" . $end_dayofweek . "]");
+
+        // 숙박시작일과 종료일이 같은 해인 경우 월/일만 표시
+        if (strncmp($stnd_srt_dt, $stnd_g_end_dt, 4) == 0)
+        {
+            $srt_dt = str_replace('-', '/', substr($stnd_srt_dt, 5, 5));
+            //$end_dt = str_replace('-', '/', substr($rsvt_info->stnd_end_dt, 5, 5));
+            $end_dt = str_replace('-', '/', substr($stnd_g_end_dt, 5, 5));
+        }
+        else
+        {
+            $srt_dt = str_replace('-', '/', $stnd_srt_dt);
+            //$end_dt = str_replace('-', '/', $rsvt_info->stnd_end_dt);
+            $end_dt = str_replace('-', '/', $stnd_g_end_dt);
+        }
+
+        info_log("rsvt/cnfm_msg/", "stnd_g_end_dt = [" . $stnd_g_end_dt . "]");
+        info_log("rsvt/cnfm_msg/", "end_dt   = [" . $end_dt . "]");
+
+        // 1박인 경우
+        if ($loop_cnt <= 1)
+        {
+            $rsv_term_msg = $srt_dt . " ~ " . $end_dt . " (" . $begin_dayofweek . ") " . $loop_cnt . "박";
+        }
+        // 2박 이상인 경우
+        else if ($loop_cnt >= 2)
+        {
+            $rsv_term_msg = $srt_dt . " ~ " . $end_dt . " (" . $begin_dayofweek . " ~ " . $end_dayofweek . ") " . $loop_cnt . "박";
+        }
+
+        info_log("rsv_term_msg", "예약 기간 메시지 처리 End!");
+        info_log("rsv_term_msg", "================================================================================");
+
+        return $rsv_term_msg;
+    }
+
 ?>
+

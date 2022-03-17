@@ -1719,8 +1719,8 @@ class Rsvt extends CI_Controller
 
             $acnt_info_msg = "아래의 계좌로 6시간 이내에 입금하시고 예약자 성함과 함께 입금완료 문자 주시면, "
                            . "확인 후 예약확정 문자를 다시 드립니다.\n\n"
-                           . "SC은행 275-20-368100\n"
-                           . "예금주 강민석\n\n"
+                           . "토스뱅크 1000-2009-3994\n"
+                           . "예금주 박인선\n\n"
                            . "감사합니다:)";
 
 
@@ -1798,124 +1798,88 @@ class Rsvt extends CI_Controller
 
         info_log("rsvt/cnfm_msg/", "rsv_srno = [" . $rsv_srno  . "]");
 
-        // 예약정보 조회
-        $rsvt_info = $this->stay_m->get_rsvt_info($rsv_srno);
+        // 예약 연장 여부 조회
+        $continue_rsvt = $this->stay_m->get_continue_rsvt_yn($rsv_srno);
 
-        // 메시지 생성
-        info_log("rsvt/cnfm_msg/", "gst_nm      = [" . $rsvt_info->gst_nm . "]"     , $log_lvl);
-
-        if (strcmp($rsvt_info->hsrm_cls, "01") == 0)
+        if (isset($continue_rsvt))
         {
-            $hsrm_cls_size = "19평";
-        }
-        else if (strcmp($rsvt_info->hsrm_cls, "02") == 0)
-        {
-            $hsrm_cls_size = "21평";
-        }
+            $rsv_term_msg = rsv_term_msg($continue_rsvt->hsrm_cls, $continue_rsvt->srt_dt, $continue_rsvt->end_dt, $continue_rsvt->stnd_srt_dt, $continue_rsvt->stnd_g_end_dt);
 
-        info_log("rsvt/cnfm_msg/", "hsrm_cls  = [" . $rsvt_info->hsrm_cls . "]"    , $log_lvl);
-        info_log("rsvt/cnfm_msg/", "srt_dt    = [" . $rsvt_info->srt_dt . "]" , $log_lvl);
-        info_log("rsvt/cnfm_msg/", "end_dt    = [" . $rsvt_info->end_dt . "]" , $log_lvl);
+            info_log("rsvt/cnfm_msg/", "rsv_term_msg      = [" . $rsv_term_msg . "]");
 
-        // get_rsv_term($hsrm_cls, $srt_dt, $end_dt, $extend_yn)
-        $term_info = $this->stay_m->get_rsv_term($rsvt_info->hsrm_cls, $rsvt_info->srt_dt, $rsvt_info->end_dt, 'Y');
+            $cnfm_msg = $continue_rsvt->stay_cnt . "박 " . $continue_rsvt->amt . "만원 입금(" . $continue_rsvt->stnd_cnfm_dt . ") 확인되어,\n"
+                      . "예약일정이 " . $rsv_term_msg . "으로 변경되었습니다.\n\n"
+                      . "감사합니다. :-)";
 
-        $loop_times = 0;
-        $loop_cnt = 0;
-        foreach ($term_info as $term_i)
-        {
-            $loop_cnt = $loop_cnt + 1;
-
-            //info_log("rsvt/prc", "dayofweek      = [" . $term_i->dayofweek . "]"     , $log_lvl);
-
-            if ($loop_cnt == 1)
-            {
-                $begin_dayofweek = $term_i->dayofweek;
-
-                // 2021.05.05. 1박 등록을 위해 시작일과 종료일이 동일한 경우 처리
-                if (strcmp($rsvt_info->srt_dt, $rsvt_info->end_dt) == 0)
-                {
-                    $end_dayofweek = $term_i->dayofweek;
-                }
-            }
-            else if (strcmp($rsvt_info->end_dt, $term_i->dt) == 0)
-            {
-                $end_dayofweek = $term_i->dayofweek;
-            }
-        }
-
-        info_log("rsvt/cnfm_msg/", "begin_dayofweek      = [" . $begin_dayofweek . "]"   , $log_lvl);
-        info_log("rsvt/cnfm_msg/", "end_dayofweek        = [" . $end_dayofweek . "]"     , $log_lvl);
-
-        // 숙박시작일과 종료일이 같은 해인 경우 월/일만 표시
-        if (strncmp($rsvt_info->stnd_srt_dt, $rsvt_info->stnd_end_dt, 4) == 0)
-        {
-            $srt_dt = str_replace('-', '/', substr($rsvt_info->stnd_srt_dt, 5, 5));
-            //$end_dt = str_replace('-', '/', substr($rsvt_info->stnd_end_dt, 5, 5));
-            $end_dt = str_replace('-', '/', substr($rsvt_info->g_end_dt, 5, 5));
         }
         else
         {
-            $srt_dt = str_replace('-', '/', $rsvt_info->stnd_srt_dt);
-            //$end_dt = str_replace('-', '/', $rsvt_info->stnd_end_dt);
-            $end_dt = str_replace('-', '/', $rsvt_info->g_end_dt);
+            // 예약정보 조회
+            $rsvt_info = $this->stay_m->get_rsvt_info($rsv_srno);
+
+            // 메시지 생성
+            info_log("rsvt/cnfm_msg/", "gst_nm      = [" . $rsvt_info->gst_nm . "]"     , $log_lvl);
+
+            if (strcmp($rsvt_info->hsrm_cls, "01") == 0)
+            {
+                $hsrm_cls_size = "19평";
+            }
+            else if (strcmp($rsvt_info->hsrm_cls, "02") == 0)
+            {
+                $hsrm_cls_size = "21평";
+            }
+
+            info_log("rsvt/cnfm_msg/", "hsrm_cls  = [" . $rsvt_info->hsrm_cls . "]"    , $log_lvl);
+            info_log("rsvt/cnfm_msg/", "srt_dt    = [" . $rsvt_info->srt_dt . "]" , $log_lvl);
+            info_log("rsvt/cnfm_msg/", "end_dt    = [" . $rsvt_info->end_dt . "]" , $log_lvl);
+    
+            // get_rsv_term($hsrm_cls, $srt_dt, $end_dt, $extend_yn)
+            //$term_info = $this->stay_m->get_rsv_term($rsvt_info->hsrm_cls, $rsvt_info->srt_dt, $rsvt_info->end_dt, 'Y');
+            $rsv_term_msg = rsv_term_msg($rsvt_info->hsrm_cls, $rsvt_info->srt_dt, $rsvt_info->end_dt, $rsvt_info->stnd_srt_dt, $rsvt_info->stnd_g_end_dt);
+       
+            /* 2020.10.13. 성인/자녀수 구분 등록 처리 기능 추가로 인한 메시지 변경
+            $cnfm_msg = "안녕하세요, " . $rsvt_info->gst_nm . "님!\n\n"
+                      . $rsv_term_msg . "\n"
+                      . "머무른채 " . $rsvt_info->hsrm_cls_nm . " " . $hsrm_cls_size . "에\n"
+                      . $rsvt_info->gst_desc . "분, 입금 확인되어 예약 확정되었습니다.\n\n"
+                      . "입실은 오후 5시 이후이며\n"
+                      . "퇴실은 오전 11시까지입니다.\n\n"
+                      . "오시는 날,\n"
+                      . "주소 안내 문자를 보내드리겠습니다.\n\n"
+                      . "설레임 가득한 여행 준비하시고,\n"
+                      . "그 날 인사드리겠습니다.\n\n"
+                      . "감사합니다. :)\n\n\n"
+                      . "*혹 예약자분과 입금자분 성함이 다를 경우, 예약자분 성함도 알려주시면 감사하겠습니다.\n\n"
+                      . "*자녀와 함께 오시는 경우 성별과 나이를 알려주시면 세팅에 참고가 될 거 같습니다. ^^\n\n"
+                      ;
+            */
+    
+            $gst_cnt_msg = "성인 " . $rsvt_info->adlt_cnt . "분";
+    
+            if ($rsvt_info->chld_cnt > 0)
+            {
+                $gst_cnt_msg = $gst_cnt_msg . ", 자녀 " . $rsvt_info->chld_cnt . "분";
+            }
+    
+            $cnfm_msg = "안녕하세요, " . $rsvt_info->gst_nm . "님!\n\n"
+                      . $rsv_term_msg . "\n"
+                      . "머무른채 " . $rsvt_info->hsrm_cls_nm . " " . $hsrm_cls_size . "에\n"
+                      . $gst_cnt_msg . " 입금 확인되어 예약 확정되었습니다.\n\n"
+                      . "입실은 오후 5시 이후이며\n"
+                      . "퇴실은 오전 11시까지입니다.\n\n"
+                      . "오시는 날,\n"
+                      . "주소 안내 문자를 보내드리겠습니다.\n\n"
+                      . "건강히 설레임 가득한 여행 준비하시고,\n"
+                      . "그 날 인사드리겠습니다.\n\n"
+                      . "저희는 머무르시는 동안 아늑하고 편안하게 지내실 수 있도록 정갈하게 준비할게요!\n\n"
+                      . "감사합니다. :)\n\n\n"
+                      . "*혹 예약하시는 분과 입금 또는 숙박하시는 분이 다를 경우, 입금 또는 숙박하시는 분의 \n"
+                      . " 성함과 연락처도 알려주시기 바랍니다.\n\n"
+                      . "*자녀와 함께 오시는 경우 성별과 나이를 알려주시면 세팅에 참고가 될 거 같습니다. ^^\n\n"
+                      ;
+    
+            info_log("rsvt/cnfm_msg/", "cnfm_msg      = [" . $cnfm_msg . "]"   , $log_lvl);
         }
-
-        info_log("rsvt/cnfm_msg/", "g_end_dt = [" . $rsvt_info->g_end_dt . "]"   , $log_lvl);
-        info_log("rsvt/cnfm_msg/", "end_dt   = [" . $end_dt . "]"   , $log_lvl);
-
-        // 1박인 경우
-        if ($loop_cnt <= 1)
-        {
-            $rsv_term_msg = $srt_dt . " ~ " . $end_dt . " (" . $begin_dayofweek . ") " . $loop_cnt . "박";
-        }
-        // 2박 이상인 경우
-        else if ($loop_cnt >= 2)
-        {
-            $rsv_term_msg = $srt_dt . " ~ " . $end_dt . " (" . $begin_dayofweek . " ~ " . $end_dayofweek . ") " . $loop_cnt . "박";
-        }
-
-        /* 2020.10.13. 성인/자녀수 구분 등록 처리 기능 추가로 인한 메시지 변경
-        $cnfm_msg = "안녕하세요, " . $rsvt_info->gst_nm . "님!\n\n"
-                  . $rsv_term_msg . "\n"
-                  . "머무른채 " . $rsvt_info->hsrm_cls_nm . " " . $hsrm_cls_size . "에\n"
-                  . $rsvt_info->gst_desc . "분, 입금 확인되어 예약 확정되었습니다.\n\n"
-                  . "입실은 오후 5시 이후이며\n"
-                  . "퇴실은 오전 11시까지입니다.\n\n"
-                  . "오시는 날,\n"
-                  . "주소 안내 문자를 보내드리겠습니다.\n\n"
-                  . "설레임 가득한 여행 준비하시고,\n"
-                  . "그 날 인사드리겠습니다.\n\n"
-                  . "감사합니다. :)\n\n\n"
-                  . "*혹 예약자분과 입금자분 성함이 다를 경우, 예약자분 성함도 알려주시면 감사하겠습니다.\n\n"
-                  . "*자녀와 함께 오시는 경우 성별과 나이를 알려주시면 세팅에 참고가 될 거 같습니다. ^^\n\n"
-                  ;
-        */
-
-        $gst_cnt_msg = "성인 " . $rsvt_info->adlt_cnt . "분";
-
-        if ($rsvt_info->chld_cnt > 0)
-        {
-            $gst_cnt_msg = $gst_cnt_msg . ", 자녀 " . $rsvt_info->chld_cnt . "분";
-        }
-
-        $cnfm_msg = "안녕하세요, " . $rsvt_info->gst_nm . "님!\n\n"
-                  . $rsv_term_msg . "\n"
-                  . "머무른채 " . $rsvt_info->hsrm_cls_nm . " " . $hsrm_cls_size . "에\n"
-                  . $gst_cnt_msg . " 입금 확인되어 예약 확정되었습니다.\n\n"
-                  . "입실은 오후 5시 이후이며\n"
-                  . "퇴실은 오전 11시까지입니다.\n\n"
-                  . "오시는 날,\n"
-                  . "주소 안내 문자를 보내드리겠습니다.\n\n"
-                  . "건강히 설레임 가득한 여행 준비하시고,\n"
-                  . "그 날 인사드리겠습니다.\n\n"
-                  . "저희는 머무르시는 동안 아늑하고 편안하게 지내실 수 있도록 정갈하게 준비할게요!\n\n"
-                  . "감사합니다. :)\n\n\n"
-                  . "*혹 예약자분과 입금자분 성함이 다를 경우, 예약자분 성함도 알려주시면 감사하겠습니다.\n\n"
-                  . "*자녀와 함께 오시는 경우 성별과 나이를 알려주시면 세팅에 참고가 될 거 같습니다. ^^\n\n"
-                  ;
-
-        info_log("rsvt/cnfm_msg/", "cnfm_msg      = [" . $cnfm_msg . "]"   , $log_lvl);
 
         $data['cnfm_msg'] = $cnfm_msg;
 
