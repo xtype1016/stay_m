@@ -45,7 +45,6 @@ Class Auth extends CI_Controller
 
     public function login()
     {
-
         info_log("auth/login", "================================================================================");
         info_log("auth/login", "로그인 시작!");
 
@@ -76,7 +75,7 @@ Class Auth extends CI_Controller
             }
         }
 
-        echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+        //echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 
         if ($_POST)
         {

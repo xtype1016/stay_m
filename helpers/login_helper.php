@@ -104,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 //info_log("login_helper/auto_login", "q_data->tkn = [" . $q_data->tkn . "]");
 
-                if ($q_data->expired_ymdh < date("Y-m-d H:i:s"))
+                if (isset($q_data) && $q_data->expired_ymdh < date("Y-m-d H:i:s"))
                 {
                     info_log("login_helper/auto_login", "만기일자 =  [" . $q_data->expired_ymdh . "]");
                     info_log("login_helper/auto_login", "현재일자 =  [" . date("Y-m-d H:i:s") . "]");
