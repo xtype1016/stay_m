@@ -1,6 +1,6 @@
 <div class="container">
     <header>
-        <h3><p class="text-justify">[MJP] 사용자 등록</p></h3>
+        <h3><p class="text-justify">[Staying M] 회원가입</p></h3>
         <style>
             .control-label {
                 text-align: right;
@@ -27,10 +27,8 @@
 
     <?php echo form_open('', 'class="form-horizontal" id="join_form"'); ?>
         <div class="form-group">
-<!--
             <label class="col-xs-4 control-label"><h5><strong>약관</h5></strong></label>
             <div class="col-xs-8">
-
                 <textarea class="form-control" rows="5" style="overflow-y:scroll" id="clas" name="clas">
 제1조
 
@@ -57,7 +55,6 @@
                 </div>
             </div>
         </div>
--->
 
         <div class="form-group">
             <label class="col-xs-4 control-label" for="password"><h5><strong>아이디(이메일)</h5></strong></label>
@@ -82,7 +79,7 @@
 
         <div class="form-group">
             <div class="pull-right">
-                <button type="submit" class="btn btn-primary" id="join_btn">등록</button>
+                <button type="submit" class="btn btn-primary" id="join_btn">가입</button>
             </div>
         </div>
     </form>

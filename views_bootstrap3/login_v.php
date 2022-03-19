@@ -55,7 +55,7 @@
                         <!--
                         <a href="/schedule_upd/upd/" class="btn btn-default">아이디/비밀번호 찾기</a>
                         -->
-                        <a href="/milla/join/" class="btn btn-default btn-sm">회원가입</a>
+                        <a href="/join/" class="btn btn-default btn-sm">회원가입</a>
                     </div>
                 </div>
             </form>

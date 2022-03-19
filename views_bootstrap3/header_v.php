@@ -8,30 +8,29 @@
     <meta name="apple-moblie-web-app-capable" content="yes" />
     -->
     <?php if (strncmp("https://xsvr.duckdns.org", base_url(), 23) == 0) { ?>
-    <title> MJP </title>
+    <title> StayM</title>
     <?php } else { ?>
-    <title> [DEV] MJP </title>
+    <title> [DEV] StayM</title>
     <?php } ?>
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/htl5.js"></script>
     <![endif]-->
+    
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <!-- datetimePicker -->
     <!--
     <script type="text/javascript" src="https://uxsolutions.github.io//bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://uxsolutions.github.io//bootstrap-datepicker/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
     -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
 
     <style type="text/css">
@@ -83,6 +82,7 @@
             overflow: auto;
            -webkit-overflow-scrolling: touch;
         }
+
         body { padding-bottom: 50px; }
     </style>
 
@@ -92,17 +92,13 @@
     <div class="container">
         <div class="pull-left">
             <h6>
-                [MJP]
+                <?php if (strncmp("https://xsvr.duckdns.org", base_url(), 23) == 0) { echo 'StayM'; } else { echo '[DEV] StayM'; } ?>
             </h6>
         </div>
 
         <div class="pull-right">
             <h6>
-                <!--
-                <?php if (isset($_SESSION['usr_id']) > 0) { echo $_SESSION['usr_id']; } else { echo "<a href='/miila/auth/login')>로그인</a>"; } ?>
-                -->
-                <?php if (isset($_SESSION['usr_id']) > 0) { echo $_SESSION['usr_id']; } ?>
-                <?php if (isset($_SESSION['usr_id']) > 0) { echo "<a href=/milla/auth/logout> | 로그아웃</a>"; } ?>
+                <?php if (isset($_SESSION['usr_id']) > 0) { echo $_SESSION['usr_id'] . ' | ' . '<a href=/auth/logout>로그아웃</a>'; } ?>
             </h6>
         </div>
 

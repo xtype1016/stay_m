@@ -65,10 +65,20 @@ class Time_mng extends CI_Controller
         // 검색 변수 초기화
         $stnd_yymm = $page_url = '';
 
-        $stnd_dt = str_replace('-', '', $this->uri->segment(3));
-        $usr = $this->uri->segment(4);
-        $time_cls = $this->uri->segment(5);
-        $view_cls = $this->uri->segment(6);
+        if (empty($this->uri->segment(3)))
+        {
+            $stnd_dt  = str_replace('-', '', $this->input->post('stnd_dt', 'TRUE'));
+            $usr      = $this->input->post('usr', 'TRUE');
+            $time_cls = $this->input->post('time_cls', 'TRUE');
+            $view_cls = $this->input->post('view_cls', 'TRUE');
+        }
+        else
+        {
+            $stnd_dt = str_replace('-', '', $this->uri->segment(3));
+            $usr = $this->uri->segment(4);
+            $time_cls = $this->uri->segment(5);
+            $view_cls = $this->uri->segment(6);
+        }
 
         //info_log("time_mng/list", "stnd_yymm = [" . $stnd_yymm . "]");
 
@@ -127,6 +137,11 @@ class Time_mng extends CI_Controller
             $time_cls = "%";
         }
 
+        info_log("time_mng/list", "dt_fr     = [" . $dt_fr . "]");
+        info_log("time_mng/list", "dt_to     = [" . $dt_to . "]");
+        info_log("time_mng/list", "usr       = [" . $usr . "]");
+        info_log("time_mng/list", "time_cls  = [" . $time_cls . "]");
+        info_log("time_mng/list", "view_cls  = [" . $view_cls . "]");
 
         // 페이지네이션 설정
         $config['base_url']         = '/time_mng/list/' . $page_url . '/page/';

@@ -4003,7 +4003,6 @@ class Stay_m extends CI_Model
                                              ,$_SESSION['db_no']));
 
         $result = $query->num_rows();
-
         if ($result == 0) {
             info_log("get_time_mng_list", "No Data Found!");
         } else {
@@ -4097,14 +4096,14 @@ class Stay_m extends CI_Model
         $result = $query->num_rows();
 
         if ($result == 0) {
-            info_log("get_time_mng_list", "last_query  = [" . $this->db->last_query() . "]");
-            info_log("get_time_mng_list", "No Data Found!");
+            info_log("get_week_fr_to", "last_query  = [" . $this->db->last_query() . "]");
+            info_log("get_week_fr_to", "No Data Found!");
         } else {
             $result = $query->result();  // 객체 $result->board_id
 
             if (!$result) {
-                info_log("get_time_mng_list", "last_query  = [" . $this->db->last_query() . "]");
-                alert_log("get_time_mng_list", "[SQL ERR] 주 시작일, 종료일 조회 오류!");
+                info_log("get_week_fr_to", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("get_week_fr_to", "[SQL ERR] 주 시작일, 종료일 조회 오류!");
             }
         }
 
