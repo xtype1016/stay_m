@@ -1,12 +1,6 @@
-#. 토지
-https://www.jejuall.com/CProperty/detail?num=610657#undefined2
-https://www.jejuall.com/CProperty/detail?num=609290#undefined2
---https://www.jejuall.com/CProperty/detail?num=611244#undefined2
--- 서쪽으로는 한림 정도까지
-https://www.jejuall.com/CProperty/detail?num=607712#undefined2
 
-###
-https://www.jejuall.com/CProperty/detail?num=614984#undefined2
+#. 마스터 빌더. 최현기
+    - 현관문1
 
 #. 방충망
 과거 주문
