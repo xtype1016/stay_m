@@ -1237,18 +1237,24 @@ class Rsvt extends CI_Controller
                         }
                         //타계좌 출금 여부 END
 
-
+                        if strlen($this->input->post('memo'  , 'TRUE')) == 0) {
+                            $memo = NULL;
+                        }
+                        else {
+                            $memo = $this->input->post('memo'  , 'TRUE');
+                        }
+                        
                         // tba006l00 update
-                        $i_data = array('tr_srno'          => $tr_srno
+                        $u_data = array('tr_srno'          => $tr_srno
                                        ,'rsv_srno'         => $this->input->post('rsv_srno', 'TRUE')
                                        ,'tr_dt'            => $tr_dt
                                        ,'amt'              => str_replace(',', '', $this->input->post('amt', 'TRUE'))
-                                       ,'memo'             => trim($this->input->post('memo'  , 'TRUE'))
-                                       ,'othr_withdraw_yn' => $this->input->post('othr_withdraw_yn', 'TRUE')
+                                       ,'memo'             => $memo
+                                       ,'othr_withdraw_yn' => $othr_withdraw_yn
                                        ,'expns_srno'       => $expns_srno
                                        );
 
-                        $result = $this->stay_m->update_tba006l00_3($i_data);
+                        $result = $this->stay_m->update_tba006l00_3($u_data);
 
                         if ($result)
                         {
@@ -1719,8 +1725,8 @@ class Rsvt extends CI_Controller
 
             $acnt_info_msg = "아래의 계좌로 6시간 이내에 입금하시고 예약자 성함과 함께 입금완료 문자 주시면, "
                            . "확인 후 예약확정 문자를 다시 드립니다.\n\n"
-                           . "토스뱅크 1000-2009-3994\n"
-                           . "예금주 박인선\n\n"
+                           . "토스뱅크 1000-1841-2808\n"
+                           . "예금주 강민석\n\n"
                            . "감사합니다:)";
 
 
