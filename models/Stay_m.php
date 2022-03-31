@@ -1978,7 +1978,7 @@ class Stay_m extends CI_Model
         $result = $query->num_rows();
 
         if ($result == 0) {
-            info_log("get_rsvt_cncl_list", "No Data Found!(sum_cls=[" . $sum_cls . "], stnd_yymm=[" . $stnd_yymm . "])");
+            info_log("get_rsvt_cncl_list", "No Data Found!(hsrm_cls=[" . $hsrm_cls . "], stnd_yymm=[" . $stnd_yymm . "])");
             return;
         } else {
             if ($prcs_cls == 'data') {

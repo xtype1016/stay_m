@@ -1237,7 +1237,7 @@ class Rsvt extends CI_Controller
                         }
                         //타계좌 출금 여부 END
 
-                        if strlen($this->input->post('memo'  , 'TRUE')) == 0) {
+                        if (strlen($this->input->post('memo'  , 'TRUE')) == 0) {
                             $memo = NULL;
                         }
                         else {

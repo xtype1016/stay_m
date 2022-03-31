@@ -4,6 +4,13 @@
     - http://www.countryhome.co.kr/atl/view.asp?a_id=6642
     - https://blog.naver.com/y9513088 (유튜브 동네업자)
 
+#. 보안 관련 업데이트만 적용 방법
+    sudo apt install unattended-upgrades
+    sudo unattended-upgrade
+
+    sudo apt-get install unattended-upgrades
+    sudo dpkg-reconfigure --priority=low unattended-upgrades
+
 #. 마스터 빌더. 최현기
     - 현관문1
 
