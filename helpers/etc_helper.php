@@ -442,14 +442,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $cash_expns_amt     = $result->cash_expns_amt    ;
         $cur_cash_expns_amt = $result->cur_cash_expns_amt;
         $cur_io_tr_srno     = $result->cur_io_tr_srno    ;
-        $last_dt            = $result->last_dt           ;
+        $stnd_dt            = $result->stnd_dt           ;
 
-        $stnd_dt = date("Ymd");
+        //$stnd_dt = date("Ymd");
 
         info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cash_expns_amt      = [" . $cash_expns_amt     . "]");
         info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cur_cash_expns_amt  = [" . $cur_cash_expns_amt . "]");
-        info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cur_io_tr_srno      = [" . $cur_io_tr_srno . "]");
-        info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "last_dt             = [" . $last_dt            . "]");
+        info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "cur_io_tr_srno      = [" . $cur_io_tr_srno     . "]");
+        info_log("etc_helper/cash_bal_ins_upd/bal_chk_tbb003l00", "stnd_dt             = [" . $stnd_dt            . "]");
 
         if (strlen($cur_io_tr_srno) == 0)
         {

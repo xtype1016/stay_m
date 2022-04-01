@@ -2785,7 +2785,9 @@ class Stay_m extends CI_Model
         $sql = "select  a.cash_expns_amt
                        ,b.cur_cash_expns_amt
                        ,b.cur_io_tr_srno
-                       ,date_format(last_day(concat(?, '01')), '%Y%m%d')  last_dt
+                       ,case when date_format(NOW(), '%Y%m') = ? then date_format(NOW(), '%Y%m%d')
+                             else date_format(last_day(concat(?, '01')), '%Y%m%d')
+                        end  stnd_dt
                   from  (
                          select  ifnull(sum(amt), 0)  cash_expns_amt
                            from  tbb001l00
@@ -2806,6 +2808,7 @@ class Stay_m extends CI_Model
                         )  b";
 
         $query = $this->db->query($sql, array($arr_data['tr_yymm']
+                                             ,$arr_data['tr_yymm']
                                              ,$_SESSION['db_no']
                                              ,$arr_data['tr_yymm']
                                              ,$_SESSION['db_no']
