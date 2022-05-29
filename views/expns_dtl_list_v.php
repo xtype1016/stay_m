@@ -42,7 +42,12 @@
                         <th style="text-align: center"><h5>구입처</h5></th>
                     <?php } ?>
                     -->
-                    <th style="text-align: center"><h5>금액</h5></th>
+                    <?php if (!$this->agent->is_mobile()) { ?>
+                        <th style="text-align: center"><h5>구입처</h5></th>
+                        <th colspan="2" style="text-align: center"><h5>금액</h5></th>
+                    <?php } else { ?>
+                        <th style="text-align: center"><h5>금액</h5></th>
+                    <?php } ?>
                 </tr>
             </thead>
 
@@ -60,7 +65,14 @@
                         <td align="center"><h6><?php echo $e_list->whr_to_buy;?></h6></td>
                     <?php } ?>
                     -->
+                    <?php if (!$this->agent->is_mobile()) { ?>
+                        <td align="center"><h6><?php echo $e_list->whr_to_buy;?></h6></td>
+                    <?php } ?>
                     <td align="right"><a href="/expns/upd/<?php echo $e_list->expns_srno; ?>"><h6><?php echo number_format($e_list->amt);?></h6></a></td>
+
+                    <?php if (!$this->agent->is_mobile()) { ?>
+                        <td align="right"><h6><?php if ($e_list->sum_amt <> $e_list->amt) { echo number_format($e_list->sum_amt); } ?></h6></td>
+                    <?php } ?>
                 </tr>
                 <?php
                     } }
@@ -69,9 +81,20 @@
 
             <tfoot>
                 <tr>
+                    <!--
                     <th colspan="3" style="vertical-align: middle; text-align: left">
                         <?php echo $pagination; ?>
                     </th>
+                    -->
+
+                    <?php if (!$this->agent->is_mobile()) { ?>
+                        <th colspan="5" style="vertical-align: middle; text-align: left">
+                    <?php } else { ?>
+                        <th colspan="3" style="vertical-align: middle; text-align: left">
+                    <?php } ?>
+                    <?php echo $pagination; ?>
+                    </th>
+
                     <th style="vertical-align: middle; text-align: right">
                         <a href="<?php if (isset($_SESSION['expns_smmry_uri'])) { echo '/' . $_SESSION['expns_smmry_uri']; } else { echo '/expns/smmry/'; } ; ?>" class="btn btn-default btn-sm">목록</a>
                         <!--

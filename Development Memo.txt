@@ -1,5 +1,52 @@
 Development Memo
 
+#. -- 입출금거래 정리
+	- 기존 카드출금을 입출금 테이블에 직접 입력하던 것을 지출 테이블에 입력하고 그것을 조회하는 것으로 변경.
+	  또는 지출내역 조회시 입출금 테이블의 내역을 포함.
+	>> 일시적인 것으로 불필요
+
+#. 블로그 입출금의 경우 계좌 잔고에 반영. 2022.05월 분 부터
+SELECT  dt
+       ,memo
+       ,cast(amt AS SIGNED) * (case when io_tr_cls LIKE '1%' then  1
+                                    when io_tr_cls LIKE '2%' then -1
+                               END)
+  FROM  tbb003l00
+ WHERE  dt LIKE '202205%'
+   AND  del_yn = 'N'
+   AND  IO_TR_CLS != '201'
+  UNION ALL
+SELECT  expns_dt  AS dt
+       ,memo
+       ,-1 * cast(amt AS SIGNED)
+  FROM  tbb001l00
+ WHERE  expns_dt LIKE '202205%'
+   AND  EXPNS_CHNL_CLS = '01'
+   AND  del_yn = 'N'
+UNION all
+SELECT  a.tr_dt  AS dt
+       ,b.clm_val_nm  AS memo
+       ,b.othr_info * CAST(a.amt AS SIGNED)
+  FROM  tba006l00  a
+       ,tba003i00  b
+ WHERE  a.DB_NO = '0000000002'
+   AND  a.tr_dt LIKE '202205%'
+   AND  a.del_yn = 'N'
+   AND  b.db_no IN ('0000000000', a.db_no)
+   AND  b.clm_nm = 'TR_CLS'
+   AND  b.clm_val = a.tr_cls
+   AND  b.addtnl_info != '2'
+   AND  b.del_yn = 'N'
+ ORDER BY  dt
+;
+
+
+
+#. 논의 사항
+	- CLIP 버전 통일(4, 5)
+	- 항목 연결 방법
+
+
 #. 부트스트랩 5 적용
 
 #. 일정 연장 기능 추가

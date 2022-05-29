@@ -564,7 +564,7 @@ class Fix_expns extends CI_Controller
                     info_log("fix_expns/del", "================================================================================");
 
                     //redirect(base_url($t_url));
-                    redirect(base_url("fix_fix_expns/list"));
+                    redirect(base_url("fix_expns/list"));
                 }
             }
             else

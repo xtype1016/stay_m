@@ -160,6 +160,11 @@ class Asset extends CI_Controller
         // 입출금거래 현금지출합계금액 ins/upd
         cash_bal_ins_upd($stnd_yymm);
 
+        if ($stnd_yymm >= "202205")
+        {
+            bl_bal_ins_upd($stnd_yymm);
+        }
+
         // 페이지네이션 설정
         $config['base_url']         = '/asset/ac_bal/' . $page_url . '/page/';
         $config['total_rows']       = $this->stay_m->get_ac_bal($stnd_yymm, 'rowcnt');         // 표시할 게시물 총 수

@@ -1787,6 +1787,7 @@ class Stay_m extends CI_Model
                                 when char_length(a.whr_to_buy) >  5 then concat(substr(a.whr_to_buy, 1, 4), '...')
                            end  whr_to_buy
                           ,a.amt
+                          ,sum(a.amt) over (partition by concat(a.expns_dt, a.whr_to_buy))  sum_amt
                           ,a.expns_srno
                           ");
         $this->db->from('tbb001l00  a');
@@ -2831,6 +2832,63 @@ class Stay_m extends CI_Model
 
         return $result;
     }
+
+
+    public function bl_bal_chk_tbb003l00($arr_data)
+    {
+        $sql = "select  a.bl_io_amt
+                       ,b.cur_bl_io_amt
+                       ,b.cur_io_tr_srno
+                       ,case when date_format(NOW(), '%Y%m') = ? then date_format(NOW(), '%Y%m%d')
+                             else date_format(last_day(concat(?, '01')), '%Y%m%d')
+                        end  stnd_dt
+                  from  (
+                         SELECT  sum(b.othr_info * CAST(a.amt AS SIGNED))  bl_io_amt
+                           FROM  tba006l00  a
+                                ,tba003i00  b
+                          WHERE  a.DB_NO = ?
+                            AND  a.tr_dt LIKE concat(?, '%')
+                            AND  a.del_yn = 'N'
+                            AND  b.db_no IN ('0000000000', a.db_no)
+                            AND  b.clm_nm = 'TR_CLS'
+                            AND  b.clm_val = a.tr_cls
+                            AND  b.addtnl_info != '2'  -- AB 수익 제외
+                            AND  b.del_yn = 'N'
+                        )  a
+                       ,(
+                         select  ifnull(sum(amt), 'N')    cur_bl_io_amt
+                                ,io_tr_srno               cur_io_tr_srno
+                           from  tbb003l00
+                          where  db_no = ?
+                            and  dt like concat(?, '%')
+                            and  io_tr_cls = '101'
+                            and  del_yn = 'N'
+                        )  b";
+
+        $query = $this->db->query($sql, array($arr_data['tr_yymm']
+                                             ,$arr_data['tr_yymm']
+                                             ,$_SESSION['db_no']
+                                             ,$arr_data['tr_yymm']
+                                             ,$_SESSION['db_no']
+                                             ,$arr_data['tr_yymm']
+                                             ));
+
+        //$result = $query->result();  // 객체 $result->board_id
+        $result = $query->row();  // 단건, 객체 $result->board_id
+
+        if (!$result) {
+            $result_rows = $query->num_rows();
+            if ($result_rows == 0) {
+                info_log("bl_bal_chk_tbb003l00", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("bl_bal_chk_tbb003l00", "BL 입출금 합계금액 조회 데이터 없음!(" . $arr_data['tr_yymm'] . ")");
+            } else {
+                info_log("bl_bal_chk_tbb003l00", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("bl_bal_chk_tbb003l00", "[SQL ERR] BL 입출금 합계금액 조회 오류!");
+            }
+        }
+
+        return $result;
+    }    
 
 
     public function delete_tbb002l00($arr_data)

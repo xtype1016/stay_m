@@ -547,6 +547,144 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 
 
+    function bl_bal_ins_upd($stnd_yymm)
+    {
+        $CI =& get_instance();
+
+        info_log("bl_bal_ins_upd", "================================================================================");
+        info_log("bl_bal_ins_upd", "입출금거래 BL 수입 합계금액 등록 Begin!");
+
+        info_log("etc_helper/bl_bal_ins_upd", "stnd_yymm = [" . $stnd_yymm . "]");
+
+        // 현금지출, 잔고 Update
+        $i_data = array('tr_yymm' => $stnd_yymm
+                    );
+
+        //$result = $CI->stay_m->bal_update_tbb002l00($i_data);
+
+        $result = $CI->stay_m->bl_bal_chk_tbb003l00($i_data);
+
+        if ($result)
+        {
+            info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "입출금거래 BL 입출금 합계 조회 정상 처리!");
+        }
+        else
+        {
+            info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "last_query  = [" . $CI->db->last_query() . "]");
+            alert_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "[SQL ERR] 입출금거래 BL 입출금 조회 오류!!");
+        }
+
+        $bl_io_amt      = $result->bl_io_amt     ;
+        $cur_bl_io_amt  = $result->cur_bl_io_amt ;
+        $cur_io_tr_srno = $result->cur_io_tr_srno;
+        $stnd_dt        = $result->stnd_dt       ;
+
+        $memo = 'BL ' . substr($stnd_dt, 0, 6);
+
+        //$stnd_dt = date("Ymd");
+
+        info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "bl_io_amt      = [" . $bl_io_amt      . "]");
+        info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "cur_bl_io_amt  = [" . $cur_bl_io_amt  . "]");
+        info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "cur_io_tr_srno = [" . $cur_io_tr_srno . "]");
+        info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "stnd_dt        = [" . $stnd_dt        . "]");
+        info_log("etc_helper/bl_bal_ins_upd/bl_bal_chk_tbb003l00", "memo           = [" . $memo           . "]");
+
+        if (strlen($cur_io_tr_srno) == 0)
+        {
+            // insert
+            $CI->db->trans_begin();
+
+            $io_tr_srno = $CI->stay_m->get_clm_sr_val('IO_TR_SRNO');
+
+            info_log("etc_helper/bl_bal_ins_upd/insert", "io_tr_srno             = [" . $io_tr_srno            . "]");
+
+            // 2022.03.11. dt 월말일자에서 조회일 현재일자로 변경
+            //$i_data = array('io_tr_srno' => $io_tr_srno
+            //               ,'dt'         => $last_dt
+            //               ,'io_tr_cls'  => '201'
+            //               ,'memo'       => NULL
+            //               ,'amt'        => $cash_expns_amt
+            //               );            
+
+            $i_data = array('io_tr_srno' => $io_tr_srno
+                           ,'dt'         => $stnd_dt
+                           ,'io_tr_cls'  => '101'
+                           ,'memo'       => $memo
+                           ,'amt'        => $bl_io_amt
+                           );
+
+            $result = $CI->stay_m->insert_tbb003l00($i_data);
+
+            if ($result)
+            {
+                $CI->db->trans_commit();
+
+                info_log("etc_helper/bl_bal_ins_upd/", "BL 입출금 합계금액 입력 완료!");
+            }
+            else
+            {
+                info_log("etc_helper/bl_bal_ins_upd/insert_tbb003l00", "last_query  = [" . $CI->db->last_query() . "]");
+                $CI->db->trans_rollback();
+                alert_log("etc_helper/bl_bal_ins_upd/insert_tbb003l00", "[SQL ERR] BL 입출금 합계금액 입력 오류!");
+            }
+        }
+        else if (strlen($cur_io_tr_srno) != 0 && $bl_io_amt != $cur_bl_io_amt)
+        {
+            // update
+            $CI->db->trans_begin();
+
+            info_log("etc_helper/bl_bal_ins_upd/update", "io_tr_srno             = [" . $cur_bl_io_amt            . "]");
+
+            // 2022.03.11. dt 월말일자에서 조회일 현재일자로 변경
+            //            $u_data = array('io_tr_srno' => $cur_io_tr_srno
+            //                           ,'dt'         => $last_dt
+            //                           ,'io_tr_cls'  => '201'
+            //                           ,'memo'       => NULL
+            //                           ,'amt'        => $cash_expns_amt
+            //                           );
+
+            $u_data = array('io_tr_srno' => $cur_io_tr_srno
+                           ,'dt'         => $stnd_dt
+                           ,'io_tr_cls'  => '101'
+                           ,'memo'       => $memo
+                           ,'amt'        => $bl_io_amt
+                           );
+
+            $result = $CI->stay_m->update_tbb003l00_1($u_data);
+
+            if ($result)
+            {
+                // No data found/변경내용이 없을 경우, 다건 처리시 정상으로 리턴되어 추가로 확인 처리함
+                $prcs_cnt = $CI->db->affected_rows();
+                if ($prcs_cnt != 1)
+                {
+                    info_log("etc_helper/bl_bal_ins_upd/update_tbb003l00_1", "last_query  = [" . $CI->db->last_query() . "]");
+                    $CI->db->trans_rollback();
+                    alert_log("etc_helper/bl_bal_ins_upd/update_tbb003l00_1", "[SQL ERR] BL 입출금 합계금액 수정 처리 오류![" . $prcs_cnt . "]!");
+                }
+                else
+                {
+                    $CI->db->trans_commit();
+
+                    info_log("etc_helper/bl_bal_ins_upd/", "BL 입출금 합계금액 수정 완료!");
+                }
+            }
+            else
+            {
+                info_log("etc_helper/bl_bal_ins_upd/update_tbb003l00_1", "last_query  = [" . $CI->db->last_query() . "]");
+                $CI->db->trans_rollback();
+                alert_log("etc_helper/bl_bal_ins_upd/update_tbb003l00_1", "[SQL ERR] BL 입출금 합계금액 수정 오류!");
+            }
+
+        }
+
+        info_log("bl_bal_ins_upd", "입출금거래 BL 입출금 합계금액 등록 End!");
+        info_log("bl_bal_ins_upd", "================================================================================");
+
+        return;
+    }
+
+
     function rsv_term_msg($hsrm_cls, $srt_dt, $end_dt, $stnd_srt_dt, $stnd_g_end_dt)
     {
         $CI =& get_instance();
@@ -621,7 +759,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         info_log("rsv_term_msg", "================================================================================");
 
         return $rsv_term_msg;
-    }
+    } 
 
 ?>
 

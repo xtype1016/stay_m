@@ -543,6 +543,11 @@ class Io_tr extends CI_Controller
         // 입출금거래 현금지출합계금액 ins/upd
         cash_bal_ins_upd($stnd_yymm);
 
+        if ($stnd_yymm >= "202205")
+        {
+            bl_bal_ins_upd($stnd_yymm);
+        }
+
         // 페이지네이션 설정
         $config['base_url']         = '/io_tr/smmry/' . $page_url . '/page/';
         //$config['total_rows']       = $this->stay_m->get_item_list('IO_TR_CLS', '', 'rowcnt');         // 표시할 게시물 총 수
@@ -918,12 +923,6 @@ class Io_tr extends CI_Controller
             if ($this->form_validation->run() == TRUE)
             {
                 (int)$amt = str_replace(',', '', $this->input->post('amt', 'TRUE'));
-
-                // 금액 입력 확인
-                if ($amt <= 0)
-                {
-                    alert_log("io_tr/ins/", "금액이 0보다 작거나 같습니다!");
-                }
 
                 if (strlen($this->input->post('memo', 'TRUE')) > 0)
                 {

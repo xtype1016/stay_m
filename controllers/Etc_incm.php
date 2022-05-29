@@ -529,7 +529,7 @@ class Etc_incm extends CI_Controller
         $stnd_dt = date("Y-m-d");
         $data['stnd_dt'] = $stnd_dt;
 
-        $data['tr_cls_list']       = $this->stay_m->get_list('TR_CLS', 'Y');
+        $data['tr_cls_list']       = $this->stay_m->get_list('TR_CLS', 'N');
         $data['hsrm_cls_list']     = $this->stay_m->get_list('HSRM_CLS');
         $data['rsv_chnl_cls_list'] = $this->stay_m->get_list('RSV_CHNL_CLS', 'Y');
 
