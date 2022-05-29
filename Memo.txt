@@ -1,15 +1,22 @@
 
 #. 제주 설계/시공사
+https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=622
     - https://countryhome.co.kr:454/atl/view.asp?a_id=7237
     - http://www.countryhome.co.kr/atl/view.asp?a_id=6642
     - https://blog.naver.com/y9513088 (유튜브 동네업자)
+    https://www.newsjeju.net/news/articleView.html?idxno=357488
+    http://www.jdhomeplan.com/index.php
+    https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=495
+    https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=483
+    https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=436
+    https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=398
 
 #. 보안 관련 업데이트만 적용 방법
     sudo apt install unattended-upgrades
     sudo unattended-upgrade
 
-    sudo apt-get install unattended-upgrades
-    sudo dpkg-reconfigure --priority=low unattended-upgrades
+    #sudo apt-get install unattended-upgrades
+    #sudo dpkg-reconfigure --priority=low unattended-upgrades
 
 #. 마스터 빌더. 최현기
     - 현관문1
