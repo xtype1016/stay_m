@@ -75,10 +75,12 @@
                 <td colspan="3" align="center"><h6><?php echo "합  계"; ?></h6></td>
                 <td align="right"><h6><?php echo number_format($i_list->amt); ?></h6></td>
 
+                <!--
                 <tr>
                 <td colspan="3" align="center"><h6><?php echo "계좌 잔고"; ?></h6></td>
                 <td align="right"><h6><?php echo number_format($i_list->acnt_bal); ?></h6></td>
                 </tr>
+                -->
 
                 <?php } else { ?>
                 <td align="center"><h6><?php echo $i_list->stnd_tr_dt; ?></h6></td>

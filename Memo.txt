@@ -1,4 +1,6 @@
 
+작가, 오디오 크리에이터, 개발자
+
 #. 제주 설계/시공사
 https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=622
     - https://countryhome.co.kr:454/atl/view.asp?a_id=7237
@@ -359,23 +361,6 @@ SET @@global.event_scheduler =ON;
 SET GLOBAL event_scheduler = 1;
 SET @@global.event_scheduler = 1;
 
-
-SELECT * FROM information_schema.EVENTS
-
--- 매일 반복해서 실행
-CREATE EVENT everyDayEvent1
-    ON SCHEDULE
- EVERY 1 DAY
-STARTS '2021-02-10 09:00:00'
-    DO CALL FIX_EXPNS_TRNSCT();
-
-CREATE EVENT everyDayEvent2
-    ON SCHEDULE
- EVERY 1 DAY
-STARTS '2021-02-10 09:10:00'
-    DO CALL DEPOSIT_WITHDRAW();
-
-
 #. 이벤트 보기
 SELECT * FROM information_schema.EVENTS
 
@@ -383,7 +368,7 @@ DELIMITER $$
 DROP EVENT everyDayEvent1;
 CREATE EVENT everyDayEvent1
 	ON SCHEDULE
-		EVERY 1 DAY STARTS '2021-01-14 17:00:00'
+		EVERY 1 DAY STARTS '2022-06-15 17:00:00'
 	ON COMPLETION PRESERVE
 	ENABLE
 	COMMENT ''

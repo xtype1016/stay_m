@@ -1777,6 +1777,32 @@ class Rsvt extends CI_Controller
             info_log("rsvt/prc", "info_msg        = [" . $info_msg  . "]");
             info_log("rsvt/prc", "info_msg2       = [" . $info_msg2 . "]");
 
+            // 가격조회 이력 입력 시작
+            $this->db->trans_begin();
+
+            $qry_dt = date("Ymd");
+
+            $i_data = array('qry_dt'      => $qry_dt
+                           ,'hsrm_cls'    => $hsrm_cls
+                           ,'srt_dt'      => $srt_dt
+                           ,'end_dt'      => $end_dt
+                           ,'gst_num'     => $gst_num
+                           ,'discount_rt' => $discount_rt
+                           ,'total_prc'   => $total_prc
+                           );
+
+            $result = $this->stay_m->insert_tba009l00($i_data);
+
+            if (!$result)
+            {
+                info_log("rsvt/ins/insert_tba009l00", "last_query  = [" . $this->db->last_query() . "]");
+                $this->db->trans_rollback();
+                alert_log("rsvt/ins/insert_tba009l00", "[SQL ERR] 가격 조회 이력 입력 처리 오류!");
+            }
+
+            $this->db->trans_commit();
+            // 가격조회 이력 입력 종료
+
             info_log("rsvt/prc", "가격 조회 종료!");
             info_log("rsvt/prc", "================================================================================");
 

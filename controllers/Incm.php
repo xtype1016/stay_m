@@ -171,6 +171,10 @@ Class Incm extends CI_Controller
 
         $data['view_cls'] = $view_cls;
 
+        // 부가정보 조회 시작
+        $data['etc_smmry'] = $this->stay_m->get_etc_smmry($stnd_yymm, $stnd_dt);
+        // 부가정보 조회 종료
+
         info_log("incm/smmry/", "수입 요약 조회 완료!");
         info_log("incm/smmry/", "================================================================================");
 

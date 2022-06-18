@@ -103,6 +103,52 @@
             <tfoot>
             </tfoot>
         </table>
+
+        <br>
+
+        <table cellspacing="0" cellpadding="0" class="table table-striped table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="4" style="text-align: center"><h5>최근 14일</h5></th>
+                    <th colspan="2" rowspan="2" style="text-align: center"><h5>당월</h5></th>
+                </tr>
+                <tr>
+                    <th rowspan="2" style="text-align: center"><h5>예약건수</h5></th>
+                    <th colspan="3" style="text-align: center"><h5>가격조회건수</h5></th>
+                </tr>
+                <tr>
+                    <th style="text-align: center"><h5>이틀동</h5></th>
+                    <th style="text-align: center"><h5>사흘동</h5></th>
+                    <th style="text-align: center"><h5>총 조회건수</h5></th>
+                    <th style="text-align: center"><h5>전체 예약율</h5></th>
+                    <th style="text-align: center"><h5>80% 확정일</h5></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php
+                    if (isset($etc_smmry))
+                    {
+                        foreach ($etc_smmry as $etc_smmry_list)
+                        {
+                ?>
+                <tr>
+                    <td align="right"><h6><?php echo number_format($etc_smmry_list->rsv_cnt); ?></h6></td>
+                    <td align="right"><h6><?php echo number_format($etc_smmry_list->qry_cnt_01); ?></h6></td>
+                    <td align="right"><h6><?php echo number_format($etc_smmry_list->qry_cnt_02); ?></h6></td>
+                    <td align="right"><h6><?php echo number_format($etc_smmry_list->total_qry_cnt); ?></h6></td>
+                    <td align="right"><h6><?php echo number_format($etc_smmry_list->rsv_rt); ?></h6></td>
+                    <td align="center"><h6><?php echo $etc_smmry_list->cnfm_dt; ?></h6></td>
+                </tr>
+                <?php
+                        }
+                    }
+                ?>
+            </tbody>
+
+            <tfoot>
+            </tfoot>
+        </table>
         </div>
     <br>
 

@@ -4576,6 +4576,134 @@ class Stay_m extends CI_Model
         return $result;
     }
 
+    public function insert_tba009l00($arr_data)
+    {
+        $i_data = array('qry_dt'        => $arr_data['qry_dt']
+                       ,'hsrm_cls'      => $arr_data['hsrm_cls']
+                       ,'srt_dt'        => $arr_data['srt_dt']
+                       ,'end_dt'        => $arr_data['end_dt']
+                       ,'gst_num'       => $arr_data['gst_num']
+                       ,'discount_rt'   => $arr_data['discount_rt']
+                       ,'total_prc'     => $arr_data['total_prc']
+                       ,'mnpl_usr_no'   => $_SESSION['usr_no']
+                       ,'mnpl_ip'       => $_SESSION['ip_addr']
+                       ,'mnpl_ymdh'     => date("YmdHis")
+                       );
+
+        $result = $this->db->insert('tba009l00', $i_data);
+
+        //info_log("insert_tbc002l00", "last_query  = [" . $this->db->last_query() . "]");
+
+        return $result;
+    }
+
+    public function get_etc_smmry($stnd_yymm, $stnd_dt)
+    {
+        
+        $sql = "select  a.rsv_cnt
+                       ,b.qry_cnt_01
+                       ,b.qry_cnt_02
+                       ,b.total_qry_cnt
+                       ,c.rsv_rt
+                       ,d.cnfm_dt
+                  from  (
+                        select  count(*)  rsv_cnt
+                          from  tba005l00
+                         where  db_no = ?
+                           and  cnfm_dt between date_format(adddate(?, -14), '%Y%m%d') and ?
+                           and  cncl_yn = 'N'
+                        )  a
+                       ,(
+                        select  sum(case when hsrm_cls = '01' then 1 else 0 end)  qry_cnt_01
+                               ,sum(case when hsrm_cls = '02' then 1 else 0 end)  qry_cnt_02
+                               ,count(*)                                          total_qry_cnt
+                          from  tba009l00
+                         where  qry_dt between date_format(adddate(?, -14), '%Y%m%d') and ?
+                        )  b
+                       ,(
+                        select  truncate(sum(case when a.dt like concat(?, '%') then 1 else 0 end)
+                                                                            / (date_format(last_day(concat(?, '01')), '%d') * 2) * 100, 2)  rsv_rt
+                         from  (
+                                select  a.rsv_srno
+                                        ,a.hsrm_cls
+                                        ,a.rsv_chnl_cls
+                                        ,a.srt_dt
+                                        ,a.end_dt
+                                        ,a.amt
+                                        ,b.dt
+                                   from  tba005l00  a
+                                        ,tba004l00  b
+                                  where  a.db_no = ?
+                                    and  a.srt_dt >= date_format(adddate(concat(?, '01'), interval -1 month), '%Y%m%d')
+                                    and  a.end_dt <= date_format(adddate(concat(?, '01'), interval  2 month), '%Y%m%d')
+                                    and  a.cncl_yn = 'N'
+                                    and  b.dt between a.srt_dt and a.end_dt    
+                                )  a
+                        )  c
+                       ,( 
+                         select  min(concat(substr(a.cnfm_dt, 1, 4), '-', substr(a.cnfm_dt, 5, 2), '-', substr(a.cnfm_dt, 7, 2)))  cnfm_dt
+                                ,truncate(a.accmlt_dt_cnt
+                                    / (date_format(last_day(concat(?, '01')), '%d') * 2) * 100, 2)
+                           from  (
+                                  select  a.cnfm_dt
+                                         ,sum(a.dt_cnt) over(partition by a.group_id order by  a.cnfm_dt)  accmlt_dt_cnt
+                                    from  (
+                                           select  case when b.dt like concat(?, '%') then a.cnfm_dt end      cnfm_dt
+                                                  ,sum(case when b.dt like concat(?, '%') then 1 else 0 end)  dt_cnt
+                                                  ,'1' group_id
+                                             from  tba005l00  a
+                                                  ,tba004l00  b
+                                            where  a.db_no = ?
+                                              and  a.srt_dt >= date_format(adddate(concat(?, '01'), interval -1 month), '%Y%m%d')
+                                              and  a.end_dt <= date_format(adddate(concat(?, '01'), interval  2 month), '%Y%m%d')
+                                              and  a.cncl_yn = 'N'
+                                              and  b.dt between a.srt_dt and a.end_dt    
+                                              and  case when b.dt like concat(?, '%') then a.cnfm_dt end is not null
+                                            group by  case when b.dt like concat(?, '%') then a.cnfm_dt end
+                                          )  a
+                                 )  a
+                        where  truncate(a.accmlt_dt_cnt
+                                    / (date_format(last_day(concat(?, '01')), '%d') * 2) * 100, 2) >= 80
+                        )  d";
+    
+        $query = $this->db->query($sql, array($_SESSION['db_no']
+                                             ,$stnd_dt
+                                             ,$stnd_dt
+                                             ,$stnd_dt
+                                             ,$stnd_dt
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$_SESSION['db_no']
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$_SESSION['db_no']
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ,$stnd_yymm
+                                             ));
+    
+        $result = $query->num_rows();
+
+        if ($result == 0) {
+            info_log("get_etc_smmry", "last_query  = [" . $this->db->last_query() . "]");
+            info_log("get_etc_smmry", "No Data Found!");
+        } else {
+            $result = $query->result();  // 객체 $result->board_id
+
+            if (!$result) {
+                info_log("get_etc_smmry", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("get_etc_smmry", "[SQL ERR] 기타 요약정보 조회 오류!");
+            }
+        }
+
+        return $result;
+    }
+    
     /*=====================================================================================================================*/
     /* staym REST Api
     /*=====================================================================================================================*/
