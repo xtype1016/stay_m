@@ -3818,10 +3818,10 @@ class Stay_m extends CI_Model
         $this->db->where("a.del_yn = 'N'");
 
         if (strcmp($view_cls, "1") == 0) {
-            $this->db->where("a.sttlmt_yn = 'N'");
-        } else {
             $this->db->where("(a.expns_chnl_cls = '01'");
             $this->db->or_where("a.sttlmt_yn = 'Y')");
+        } else {
+            $this->db->where("a.sttlmt_yn = 'N'");
         }
 
         $this->db->order_by("a.trnsfr_day, a.ac_no, a.expns_day, a.fix_expns_srno");

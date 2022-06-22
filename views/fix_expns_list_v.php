@@ -59,8 +59,8 @@
                 <div class="form-group form-group-sm row">
                     <label class="sr-only" for="view_cls"></label>
                     <select class="form-control" id="view_cls" name="view_cls">
-                        <option value="1" <?php if (strncmp($view_cls, "1", 1) == 0) { echo "selected"; } ?>>현금 & 카드지출</option>
-                        <option value="2" <?php if (strncmp($view_cls, "2", 1) == 0) { echo "selected"; } ?>>현금 & 카드결제</option>
+                        <option value="1" <?php if (strncmp($view_cls, "1", 1) == 0) { echo "selected"; } ?>>현금 & 카드결제</option>
+                        <option value="2" <?php if (strncmp($view_cls, "2", 1) == 0) { echo "selected"; } ?>>현금 & 카드지출</option>
                     </select>
                     <button type="submit" class="btn btn-primary btn-sm" id="search_btn">조회</button>
                 </div>
