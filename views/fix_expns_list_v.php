@@ -87,7 +87,7 @@
                 <?php if (!$this->agent->is_mobile()) { ?> <th style="text-align: center"><h5>메모</h5></th> <?php } ?>
                 <th style="text-align: center"><h5>금액</h5></th>
                 <?php
-                if (strncmp($view_cls, "2", 1) == 0)
+                if (strncmp($view_cls, "1", 1) == 0)
                 { ?>
                     <th style="text-align: center"><h5>합계</h5></th>
                 <?php
@@ -114,7 +114,7 @@
                 <?php if (!$this->agent->is_mobile()) { ?><td align="left"><h6><?php echo $e_list->memo;?></h6></td> <?php } ?>
                 <td align="right"><h6><?php echo number_format($e_list->amt);?></h6></td>
                 <?php
-                    if (strncmp($view_cls, "2", 1) == 0 && $e_list->rownum == 1)
+                    if (strncmp($view_cls, "1", 1) == 0 && $e_list->rownum == 1)
                     {
                         $sum_amt = number_format($e_list->sum_amt);
                         echo "<td rowspan = $e_list->rowspan_val align='right'><h6>$sum_amt</h6></td>";
@@ -126,7 +126,7 @@
                 }
                  ?>
                     <tr>
-                    <td align="right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '7'; } } else { if (strncmp($view_cls, "1", 1) == 0) { echo '10'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '11'; } } ?>><h5>합 계</h5></td>
+                    <td align="right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '7'; } else { echo '6'; } } else { if (strncmp($view_cls, "1", 1) == 0) { echo '11'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '10'; } } ?>><h5>합 계</h5></td>
                     <td align="right"><h5><?php echo number_format($total_sum);?></h5></td>
                     </tr>
                 <?php
@@ -142,7 +142,7 @@
                     <?php echo $pagination; ?>
                 </th>
                 -->
-                <th style="vertical-align: middle; text-align: right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '5'; } else { echo '7'; } } else if (strncmp($view_cls, "1", 1) == 0) { echo '11'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '12'; }?>  style="vertical-align: middle; text-align: left">
+                <th style="vertical-align: middle; text-align: right" colspan=<?php if ($this->agent->is_mobile()) { if (strncmp($view_cls, "1", 1) == 0) { echo '8'; } else { echo '7'; } } else if (strncmp($view_cls, "1", 1) == 0) { echo '12'; } else if (strncmp($view_cls, "2", 1) == 0) { echo '11'; }?>  style="vertical-align: middle; text-align: left">
                     <a href="/fix_expns/ins" class="btn btn-primary btn-sm">입력</a>
                 </th>
             </tr>
