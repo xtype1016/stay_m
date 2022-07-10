@@ -11,7 +11,7 @@ https://api.telegram.org/bot5507332599:AAH5kdXozI0qxEplQanxOO-a4S6uEpDxNz4/getUp
 "message":{"message_id":4,"from":{"id":53817767,"is_bot":false,"first_name":"\ubbfc\uc11d","last_name":"\uac15","language_code":"ko"},"chat":{"id":53817767,"first_name":"\ubbfc\uc11d","last_name":"\uac15","type":"private"},"date":1657446832,"text":"https://api.telegram.org/bot5507332599:AAH5kdXozI0qxEplQanxOO-a4S6uEpDxNz4/getUpdates","entities":[{"offset":0,"length":85,"type":"url"}]}}]}
 
 chat id: 53817767 (민석)
-
+         63318243 (인선) 
 https://chicpro.dev/telegram%ED%85%94%EB%A0%88%EA%B7%B8%EB%9E%A8-chat-id-%ED%99%95%EC%9D%B8/
 
 #. 잔액 및 거래 확인

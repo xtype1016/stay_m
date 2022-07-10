@@ -28,7 +28,8 @@ class Telegram_push extends CI_Controller
 
         // $_TELEGRAM_CHAT_ID = array('페이지에서 얻은 chat_id값');
         //$_TELEGRAM_CHAT_ID = array('@xtype1016');  실행안됨
-        $_TELEGRAM_CHAT_ID = array('53817767');
+        //민석: 53817767, 인선: 63318243
+        $_TELEGRAM_CHAT_ID = array('53817767', '63318243');
 
         function telegramExecCurlRequest($handle) {
 
@@ -109,6 +110,7 @@ class Telegram_push extends CI_Controller
         }
 
         //$stnd_dt = '20220624';
+        //$fm_dt   = '2022.06.24';
         $stnd_dt = date("Ymd");
         $fm_dt   = date("Y.m.d");
         info_log("Telegram_Push/", "stnd_dt = [" . $stnd_dt . "]");
