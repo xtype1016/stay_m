@@ -1,4 +1,72 @@
 
+#. telegram Alarm Bot
+http://t.me/StayM_Bot
+token: 5507332599:AAH5kdXozI0qxEplQanxOO-a4S6uEpDxNz4
+
+https://api.telegram.org/bot발급받은토큰값/getUpdates
+
+https://api.telegram.org/bot5507332599:AAH5kdXozI0qxEplQanxOO-a4S6uEpDxNz4/getUpdates
+
+{"ok":true,"result":[{"update_id":259874580,
+"message":{"message_id":4,"from":{"id":53817767,"is_bot":false,"first_name":"\ubbfc\uc11d","last_name":"\uac15","language_code":"ko"},"chat":{"id":53817767,"first_name":"\ubbfc\uc11d","last_name":"\uac15","type":"private"},"date":1657446832,"text":"https://api.telegram.org/bot5507332599:AAH5kdXozI0qxEplQanxOO-a4S6uEpDxNz4/getUpdates","entities":[{"offset":0,"length":85,"type":"url"}]}}]}
+
+chat id: 53817767 (민석)
+
+https://chicpro.dev/telegram%ED%85%94%EB%A0%88%EA%B7%B8%EB%9E%A8-chat-id-%ED%99%95%EC%9D%B8/
+
+#. 잔액 및 거래 확인
+select  *
+  from  (
+SELECT  '입출금 거래'  TR_NM
+       ,a.tr_dt  dt
+       ,b.clm_val_nm
+       ,NULL  AC_NO
+       ,a.amt * b.othr_info
+  FROM  tba006l00  a
+       ,(
+         SELECT  clm_nm, clm_val, clm_val_nm, othr_info
+           FROM  tba003i00
+          WHERE  db_no IN ('0000000000', '0000000002')
+            AND  clm_nm = 'TR_CLS'
+            AND  del_yn = 'N'
+            AND  addtnl_info IN ('1', '9')
+        )  b 
+ WHERE  a.db_no = '0000000002'
+   AND  a.del_yn = 'N'
+   AND  a.tr_cls = b.clm_val
+ union all
+ SELECT  '지출'  TR_NM
+        ,expns_dt  dt
+        ,memo
+        ,AC_NO
+        ,cast(amt AS SIGNED) * -1
+  FROM  tbb001l00
+ WHERE  db_no = '0000000002'
+   AND  del_yn = 'N'
+   AND  ssamzi_yn = 'N'
+   AND  expns_chnl_cls = '01'
+ union all   
+SELECT  '카드결제 & 기타 수입'  TR_NM
+       ,dt
+       ,memo
+       ,CASE WHEN IO_TR_CLS = '203' THEN '312-0163-3915-51'
+		       WHEN IO_TR_CLS = '204' THEN '312-0163-3915-51'
+				 WHEN IO_TR_CLS = '207' THEN '226-20-288095'
+				 ELSE NULL
+		  END  AC_NO
+       ,CASE WHEN IO_TR_CLS LIKE '1%' THEN amt
+             ELSE CAST(AMT AS SIGNED) * -1
+        END
+  FROM  tbb003l00
+ WHERE  db_no = '0000000002'
+   AND  del_yn = 'N'
+   AND  (io_tr_cls IN ('102', '199')
+         OR io_tr_cls >= '202')
+        )  a
+ where  a.dt >= '20220501'
+order by  a.dt, AC_NO
+
+
 #. 규칙적인 생활
     - 기상시간은 6시
     - 아침식사는 10시
@@ -40,6 +108,7 @@ https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=622
     https://uujj.co.kr/bbs/board.php?bo_table=house&wr_id=398
 
 #. 보안 관련 업데이트만 적용 방법
+    sudo apt update
     sudo apt install unattended-upgrades
     sudo unattended-upgrade
 
