@@ -4704,6 +4704,50 @@ class Stay_m extends CI_Model
         return $result;
     }
     
+
+    public function get_deposit_refund_chk($stnd_dt)
+    {
+        $this->db->select('ifnull(count(*), 0) cnt
+                          ');
+        $this->db->from('tba005l00  a');
+        $this->db->where("a.db_no  = '0000000002'");
+        $this->db->where("date_format(ADDDATE(str_to_date(END_DT, '%Y%m%d'), 1), '%Y%m%d') = ", $stnd_dt);
+        $this->db->where('a.deposit > 0');
+        $this->db->where("a.cncl_yn = 'N'");
+
+        $query = $this->db->get();  // Produces: SELECT title, content, date FROM mytable
+
+        //$result = $query->result();  // 객체 $result->board_id
+        $result = $query->row();  // 단건, 객체 $result->board_id
+
+        if (!$result) {
+            $result_rows = $query->num_rows();
+            if ($result_rows == 0) {
+                info_log("get_deposit_refund_chk", "보증금 환불건 미존재!(" . $stnd_dt . ")");
+            } else {
+                info_log("get_deposit_refund_chk", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("get_deposit_refund_chk", "[SQL ERR] 보증금 환불 조회 오류!");
+            }
+        }
+
+        return $result;
+    }
+
+    public function insert_tbz098l00($arr_data)
+    {
+        $i_data = array('message'    => $arr_data['message']
+                       ,'chat_id'    => $arr_data['chat_id']
+                       ,'mnpl_ymdh'  => date("YmdHis")
+                       );
+
+        $result = $this->db->insert('tbz098l00', $i_data);
+
+        //info_log("insert_tbc002l00", "last_query  = [" . $this->db->last_query() . "]");
+
+        return $result;
+    }
+
+
     /*=====================================================================================================================*/
     /* staym REST Api
     /*=====================================================================================================================*/
