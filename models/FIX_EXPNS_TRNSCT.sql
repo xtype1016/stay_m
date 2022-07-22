@@ -164,8 +164,8 @@ BEGIN
                 ,_io_tr_srno
                 ,_stnd_dt
                 ,_io_tr_cls
-                ,CASE WHEN _memo IS NOT NULL THEN CONCAT(_expns_nm, '(', _memo, ')')
-                      ELSE _expns_nm
+                ,CASE WHEN _memo IS NOT NULL THEN _memo
+                      ELSE NULL
                  END
                 ,_amt
                 ,'N'

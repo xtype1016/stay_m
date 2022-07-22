@@ -2843,7 +2843,7 @@ class Stay_m extends CI_Model
                              else date_format(last_day(concat(?, '01')), '%Y%m%d')
                         end  stnd_dt
                   from  (
-                         SELECT  sum(b.othr_info * CAST(a.amt AS SIGNED))  bl_io_amt
+                         SELECT  ifnull(sum(b.othr_info * CAST(a.amt AS SIGNED)), 0)  bl_io_amt
                            FROM  tba006l00  a
                                 ,tba003i00  b
                           WHERE  a.DB_NO = ?
