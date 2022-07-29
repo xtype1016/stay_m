@@ -58,7 +58,7 @@
                         <a href="/join/" class="btn btn-default btn-sm">회원가입</a>
                     </div>
                 </div>
-            </form>
+            <?php echo form_close(); ?>
         </div>
     </div>
 </div>

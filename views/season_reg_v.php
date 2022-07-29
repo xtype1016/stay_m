@@ -106,7 +106,7 @@
 
                         <button type="submit" class="btn btn-primary btn-sm" id="search_btn">조회</button>
                     </div>
-                </form>
+                <?php echo form_close(); ?>
         -->
             <?php echo form_open('', 'class="form-horizontal" id="holyday_reg_form"'); ?>
                 <div class="form-group form-group-sm row">
@@ -142,7 +142,7 @@
                     </div>
                 </div>
 
-            </form>
+            <?php echo form_close(); ?>
 
         </div>
     </div>

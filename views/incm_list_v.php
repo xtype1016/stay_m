@@ -47,7 +47,7 @@
                     <label class="sr-only" for="csrf_name">csrf_name</label>
                     <input type="hidden" class="form-control" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
                 </div>
-            </form>
+            <?php echo form_close(); ?>
         </div>
     </div>
 

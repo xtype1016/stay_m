@@ -58,7 +58,7 @@
                             <input class="btn btn-primary" type="button" id="search_btn" value="조회" />
                         </div>
 
-                    </form>
+                    <?php echo form_close(); ?>
                 </div>
             </div>
 

@@ -82,5 +82,5 @@
                 <button type="submit" class="btn btn-primary" id="join_btn">가입</button>
             </div>
         </div>
-    </form>
+    <?php echo form_close(); ?>
 </div>

@@ -55,7 +55,7 @@
                         <button type="submit" class="btn btn-primary btn-sm" id="search_btn">조회</button>
                     </div>
     
-                </form>
+                <?php echo form_close(); ?>
             </div>
         </div>
     

@@ -1,3 +1,10 @@
+#. codeigniter3 this action you have requested is not allowed
+
+setInterval(function () {
+  if(alert('Your session has expired!')){}
+  else    window.location.reload(); 
+}, 7200000);
+
 
 #. 매매 걱정거리
     - 실제 손에 쥐는 금액이 얼마일까?

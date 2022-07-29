@@ -128,7 +128,7 @@
                         <input type="text" class="form-control col-xs-4" id="rsv_chnl_cls_nm" name="rsv_chnl_cls_nm" value="<?php echo $view->rsv_chnl_cls_nm; ?>" disabled>
                     </div>
                 </div>
-            </form>
+            <?php echo form_close(); ?>
         </div>
 
         <div class="panel-body">
@@ -193,7 +193,7 @@
                     </div>
                 </div>
 
-            </form>
+            <?php echo form_close(); ?>
         </div>
 
     </div>
