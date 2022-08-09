@@ -3824,7 +3824,7 @@ class Stay_m extends CI_Model
             $this->db->where("a.sttlmt_yn = 'N'");
         }
 
-        $this->db->order_by("a.trnsfr_day, a.ac_no, a.expns_day, a.fix_expns_srno");
+        $this->db->order_by("LPAD(a.trnsfr_day, 2, '0'), a.ac_no, a.expns_day, a.fix_expns_srno");
 
         if (isset($limit) && isset($offset)) {
             $this->db->limit($limit, $offset);
