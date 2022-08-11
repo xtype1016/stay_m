@@ -4452,6 +4452,7 @@ class Stay_m extends CI_Model
                                             and  b.expns_cls = a.expns_cls
                                             and  b.fix_expns_srno = a.fix_expns_srno
                                             and  b.del_yn = 'N'
+                                            and  b.expns_dt <= ?
                                           group by  a.db_no
                                                    ,a.rel_ac_no)  c on c.db_no = a.db_no and c.rel_ac_no = a.ac_no
                                  where  a.ac_cls = '3'
@@ -4478,7 +4479,7 @@ class Stay_m extends CI_Model
                                    ,c.clm_val_nm
                                    ,a.ac_cls
                                    ,d.clm_val_nm
-                                  with rollup
+                          with rollup
                        )  a
                where  a.ac_cls_nm is not null or ac_srno is NULL
                order by ifnull(a.ac_owner, '99')
@@ -4495,6 +4496,7 @@ class Stay_m extends CI_Model
                                              ,$_SESSION['db_no']
                                              ,$stnd_dt
                                              ,$_SESSION['db_no']
+                                             ,$stnd_dt
                                              ,$stnd_dt
                                              ,$_SESSION['db_no'] ));
 
@@ -4600,14 +4602,16 @@ class Stay_m extends CI_Model
     public function get_etc_smmry($stnd_yymm, $stnd_dt)
     {
         
-        $sql = "select  a.rsv_cnt
+        $sql = "select  a.rsv_chnl_cls1_cnt
+                       ,a.rsv_chnl_cls2_cnt
                        ,b.qry_cnt_01
                        ,b.qry_cnt_02
                        ,b.total_qry_cnt
                        ,c.rsv_rt
                        ,d.cnfm_dt
                   from  (
-                        select  count(*)  rsv_cnt
+                        select  SUM(if(rsv_chnl_cls = '1', 1, 0))  rsv_chnl_cls1_cnt
+                               ,SUM(if(rsv_chnl_cls = '2', 1, 0))  rsv_chnl_cls2_cnt
                           from  tba005l00
                          where  db_no = ?
                            and  cnfm_dt between date_format(adddate(?, -14), '%Y%m%d') and ?

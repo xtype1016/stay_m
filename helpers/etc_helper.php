@@ -579,7 +579,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $cur_io_tr_srno = $result->cur_io_tr_srno;
         $stnd_dt        = $result->stnd_dt       ;
 
-        $memo = 'BL ' . substr($stnd_dt, 0, 6);
+        $memo = 'BL ' . substr($stnd_dt, 0, 4) . '.' . substr($stnd_dt, 4, 2);
 
         //$stnd_dt = date("Ymd");
 

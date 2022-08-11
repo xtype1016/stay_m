@@ -113,7 +113,7 @@
                     <th colspan="2" rowspan="2" style="text-align: center"><h5>당월</h5></th>
                 </tr>
                 <tr>
-                    <th rowspan="2" style="text-align: center"><h5>예약건수</h5></th>
+                    <th rowspan="2" style="text-align: center"><h5>예약건수(BL / AB)</h5></th>
                     <th colspan="3" style="text-align: center"><h5>가격조회건수</h5></th>
                 </tr>
                 <tr>
@@ -133,7 +133,7 @@
                         {
                 ?>
                 <tr>
-                    <td align="right"><h6><?php echo number_format($etc_smmry_list->rsv_cnt); ?></h6></td>
+                    <td align="center"><h6><?php echo number_format($etc_smmry_list->rsv_chnl_cls1_cnt) . " / " . number_format($etc_smmry_list->rsv_chnl_cls2_cnt) ; ?></h6></td>
                     <td align="right"><h6><?php echo number_format($etc_smmry_list->qry_cnt_01); ?></h6></td>
                     <td align="right"><h6><?php echo number_format($etc_smmry_list->qry_cnt_02); ?></h6></td>
                     <td align="right"><h6><?php echo number_format($etc_smmry_list->total_qry_cnt); ?></h6></td>
