@@ -434,14 +434,17 @@ class Fix_expns extends CI_Controller
                 }
                 //지출 채널, 출금여부 정합성 체크 End
 
-                if (strlen($this->input->post('trnsfr_day', 'TRUE')) > 0)
+                if ($this->input->post('expns_chnl_cls', 'TRUE') == '01' && strlen($this->input->post('trnsfr_day', 'TRUE')) > 0)  
                 {
                     $trnsfr_day = trim($this->input->post('trnsfr_day', 'TRUE'));
+                    $trnsfr_day = str_pad($trnsfr_day, 2, '0', STR_PAD_LEFT);
                 }
                 else
                 {
                     $trnsfr_day = NULL;
                 }
+
+                info_log("fix_expns/upd/", "trnsfr_day = [" . $trnsfr_day . "]");
 
                 $this->db->trans_begin();
 
@@ -464,7 +467,7 @@ class Fix_expns extends CI_Controller
 
                 $u_data = array('fix_expns_srno' => $fix_expns_srno
                                ,'expns_nm'       => $this->input->post('expns_nm'       , 'TRUE')
-                               ,'trnsfr_day'     => str_pad($trnsfr_day, 2, '0', STR_PAD_LEFT)
+                               ,'trnsfr_day'     => $trnsfr_day
                                ,'expns_day'      => str_pad($this->input->post('expns_day', 'TRUE'), 2, '0', STR_PAD_LEFT)
                                ,'expns_chnl_cls' => $expns_chnl_cls
                                ,'sttlmt_yn'    => $sttlmt_yn
