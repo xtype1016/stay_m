@@ -61,28 +61,26 @@ BEGIN
                ,a.rel_ac_no
                ,a.amt
           FROM  tbb005l00  a
-         WHERE  ifnull(a.trnsfr_day, a.expns_day) > (
-                                                     SELECT  substr(z.bef_bsns_dt, 7, 2)
-                                                       FROM  (
-                                                              SELECT   a.dt        bef_bsns_dt
-                                                                      ,a.dt_cls
-                                                                      ,@rnum := @rnum + 1  rnum
-                                                                 FROM  tba004l00  a
-                                                                      ,(
-                                                                        select  @rnum := 0
-                                                                       )  b
-                                                                 WHERE  a.dt >= date_format(adddate(str_to_date(_stnd_dt, '%Y%m%d'), -10), '%Y%m%d')
-                                                                   AND  a.dt <  _stnd_dt
-                                                                   AND  a.dt_cls = '1'
-                                                                 ORDER BY  a.dt  desc
-                                                             )  z
-                                                      WHERE  z.rnum = 1
+         WHERE  ifnull(a.trnsfr_day, a.expns_day) >= (
+                                                     SELECT  case when a.dt_cls = '1' AND b.DT_CLS <> '1' then SUBSTR(c.bf_dt, 7, 2)
+                                                                  when a.dt_cls = '1' and b.dt_cls = '1' then SUBSTR(a.dt, 7, 2)
+				                                                  ELSE '99' END  bf_dt
+                                                       FROM  tba004l00  a
+                                                            ,tba004l00  b
+                                                            ,(
+                                                              SELECT  date_format(adddate(STR_TO_DATE(max(a.dt), '%Y%m%d'), 1), '%Y%m%d')  bf_dt
+                                                                FROM  tba004l00  a
+                                                               WHERE  a.dt >= date_format(adddate(STR_TO_DATE(_stnd_dt, '%Y%m%d'), -10), '%Y%m%d')
+                                                                 AND  a.dt < _stnd_dt
+                                                                 AND  a.dt_cls = '1'
+                                                             )  c
+                                                      WHERE  a.dt = _stnd_dt
+                                                        AND  b.DT = date_format(adddate(STR_TO_DATE(_stnd_dt, '%Y%m%d'), -1), '%Y%m%d')
                                                     )
            AND  ifnull(a.trnsfr_day, a.expns_day) <= (
-                                                      SELECT  substr(z.dt, 7, 2)
-                                                        FROM  tba004l00  z
-                                                       WHERE  z.dt_cls = '1'
-                                                         AND  z.dt = _stnd_dt
+                                                      SELECT  case when a.DT_CLS = '1' then SUBSTR(a.dt, 7, 2) ELSE '99' end
+                                                        FROM  tba004l00  a
+                                                       WHERE  a.dt = _stnd_dt
                                                      )
            AND  a.del_yn = 'N';
 
