@@ -4428,6 +4428,7 @@ class Stay_m extends CI_Model
                                  where  a.db_no = ?
                                    and  a.ac_cls = '2'
                                    and  a.srt_dt <= ?
+                                   and  a.end_dt >= ?
                                    and  a.del_yn = 'N'
                                  union all
                                 select  a.ac_srno
@@ -4436,9 +4437,19 @@ class Stay_m extends CI_Model
                                        ,a.ac_owner
                                        ,a.ac_cls
                                        ,a.amt
-                                       ,ifnull(c.saving_amt, 0)           io_amt
-                                       ,a.amt + ifnull(c.saving_amt, 0)   balance
+                                       ,ifnull(c.saving_amt, 0) + ifnull(b.etc_saving_amt, 0)          io_amt
+                                       ,a.amt + ifnull(c.saving_amt, 0) + ifnull(b.etc_saving_amt, 0)  balance
                                   from  tbb006i00  a
+                                        left join
+                                        (
+                                            select  a.ac_no
+                                                   ,sum(case when a.io_cls = '1' then a.amt
+                                                             when a.io_cls = '2' then -1 * a.amt
+                                                        end)  etc_saving_amt
+                                              from  tbb007l00  a
+                                             where  a.tr_dt <= ?
+                                             group by  a.ac_no
+                                        ) b  ON b.ac_no = a.ac_no
                                         left join
                                         (select  a.db_no
                                 		        ,a.rel_ac_no
@@ -4482,7 +4493,7 @@ class Stay_m extends CI_Model
                           with rollup
                        )  a
                where  a.ac_cls_nm is not null or ac_srno is NULL
-               order by ifnull(a.ac_owner, '99')
+               order by ifnull(a.ac_owner, '00')
                        ,a.ac_cls
                        ,a.ac_srno";
 
@@ -4494,6 +4505,8 @@ class Stay_m extends CI_Model
                                              ,$_SESSION['db_no']
                                              ,$stnd_dt
                                              ,$_SESSION['db_no']
+                                             ,$stnd_dt
+                                             ,$stnd_dt
                                              ,$stnd_dt
                                              ,$_SESSION['db_no']
                                              ,$stnd_dt

@@ -1,3 +1,16 @@
+
+
+
+#. yt-dlg
+    - 원본화질
+    yt-dlp -f "bestvideo+bestaudio" -P "D:\Util\yt-dlp\Downloads" https://www.youtube.com/watch?v=Vrphz-0Wpuw
+    - 일반화질
+    yt-dlp -P "D:\Util\yt-dlp\Downloads" https://www.youtube.com/watch?v=Vrphz-0Wpuw
+
+yt-dlp -f bestvideo+bestaudio -P "D:\Util\yt-dlp\Downloads" url
+https://xxxsave.net/ko/
+
+
 #. codeigniter3 this action you have requested is not allowed
 
 setInterval(function () {
@@ -104,6 +117,7 @@ SELECT  '입출금 거래'  TR_NM
        ,b.clm_val_nm
        ,NULL  AC_NO
        ,a.amt * b.othr_info
+       ,mnpl_ymdh
   FROM  tba006l00  a
        ,(
          SELECT  clm_nm, clm_val, clm_val_nm, othr_info
@@ -122,6 +136,7 @@ SELECT  '입출금 거래'  TR_NM
         ,memo
         ,AC_NO
         ,cast(amt AS SIGNED) * -1
+        ,mnpl_ymdh
   FROM  tbb001l00
  WHERE  db_no = '0000000002'
    AND  del_yn = 'N'
@@ -134,19 +149,22 @@ SELECT  '카드결제 & 기타 수입'  TR_NM
        ,CASE WHEN IO_TR_CLS = '203' THEN '312-0163-3915-51'
 		       WHEN IO_TR_CLS = '204' THEN '312-0163-3915-51'
 				 WHEN IO_TR_CLS = '207' THEN '226-20-288095'
+				 WHEN IO_TR_CLS = '208' THEN '312-0163-3915-51'
+				 WHEN IO_TR_CLS = '209' THEN '226-20-288095'
 				 ELSE NULL
 		  END  AC_NO
        ,CASE WHEN IO_TR_CLS LIKE '1%' THEN amt
              ELSE CAST(AMT AS SIGNED) * -1
         END
+       ,mnpl_ymdh
   FROM  tbb003l00
  WHERE  db_no = '0000000002'
    AND  del_yn = 'N'
    AND  (io_tr_cls IN ('102', '199')
          OR io_tr_cls >= '202')
         )  a
- where  a.dt >= '20220501'
-order by  a.dt, AC_NO
+ where  a.dt >= '20221101'
+order by  a.dt, AC_NO, mnpl_ymdh
 
 
 #. 규칙적인 생활
@@ -545,7 +563,7 @@ DELIMITER $$
 DROP EVENT everyDayEvent1;
 CREATE EVENT everyDayEvent1
 	ON SCHEDULE
-		EVERY 1 DAY STARTS '2022-06-15 17:00:00'
+		EVERY 1 DAY STARTS '2022-10-24 09:00:00'
 	ON COMPLETION PRESERVE
 	ENABLE
 	COMMENT ''
