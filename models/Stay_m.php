@@ -4768,7 +4768,7 @@ class Stay_m extends CI_Model
 
     public function get_season_srt_chk($stnd_dt)
     {
-        $this->db->select("concat(substr(a.srt_dt, 1, 4), '-', substr(a.srt_dt, 5, 2), '-', substr(a.srt_dt, 7, 2))  fm_srt_dt
+        $this->db->select("concat(substr(a.srt_dt, 1, 4), '.', substr(a.srt_dt, 5, 2), '.', substr(a.srt_dt, 7, 2))  fm_srt_dt
                           ,a.season_cls
                           ,b.clm_val_nm
                           ,ifnull(count(*), 0) cnt");
