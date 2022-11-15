@@ -4031,6 +4031,7 @@ class Stay_m extends CI_Model
                              when b.othr_info = '2' then '유튜브'
                              when b.othr_info = '3' then '들엄시민'
                              when b.othr_info = '4' then '인터넷'
+                             when b.othr_info = '5' then '그림 & 레고'
                         end   time_cls_nm
                        ,b.othr_info
                        ,SUM(a.time)  time
@@ -4764,6 +4765,39 @@ class Stay_m extends CI_Model
         return $result;
     }
 
+
+    public function get_season_srt_chk($stnd_dt)
+    {
+        $this->db->select("concat(substr(a.srt_dt, 1, 4), '-', substr(a.srt_dt, 5, 2), '-', substr(a.srt_dt, 7, 2))  fm_srt_dt
+                          ,a.season_cls
+                          ,b.clm_val_nm
+                          ,ifnull(count(*), 0) cnt");
+        $this->db->from('tba008l00  a');
+        $this->db->from('tba003i00  b');
+        $this->db->where("a.db_no  = ", $_SESSION['db_no']);
+        $this->db->where("a.del_yn = 'N'");
+        $this->db->where("date_format(ADDDATE(str_to_date(a.srt_dt, '%Y%m%d'), -95), '%Y%m%d') = ", $stnd_dt);
+        $this->db->where('b.db_no = a.db_no');
+        $this->db->where("b.CLM_NM = 'SEASON_CLS'");
+        $this->db->where("b.clm_val = a.season_cls");
+
+        $query = $this->db->get();  // Produces: SELECT title, content, date FROM mytable
+
+        //$result = $query->result();  // 객체 $result->board_id
+        $result = $query->row();  // 단건, 객체 $result->board_id
+
+        if (!$result) {
+            $result_rows = $query->num_rows();
+            if ($result_rows == 0) {
+                info_log("get_season_srt_chk", "시즌 시작 95일전 데이터 미존재!(" . $stnd_dt . ")");
+            } else {
+                info_log("get_season_srt_chk", "last_query  = [" . $this->db->last_query() . "]");
+                alert_log("get_season_srt_chk", "[SQL ERR] 시즌 시작 95일전 조회 오류!");
+            }
+        }
+
+        return $result;
+    }    
 
     /*=====================================================================================================================*/
     /* staym REST Api

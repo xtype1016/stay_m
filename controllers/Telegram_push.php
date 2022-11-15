@@ -144,18 +144,63 @@ class Telegram_push extends CI_Controller
                 if ($result)
                 {
                     $this->db->trans_commit();
-                    info_log("Telegram_Push/", "메시지 발송내역 입력 완료!");
+                    info_log("Telegram_Push/", "보증금 환불 메시지 발송내역 입력 완료!");
                 }
                 else
                 {
                     info_log("Telegram_Push/insert_tbz098l00", "last_query  = [" . $this->db->last_query() . "]");
                     $this->db->trans_rollback();
-                    alert_log("Telegram_Push/insert_tbz098l00", "[SQL ERR] 메시지 발송내역 입력 오류!");
+                    alert_log("Telegram_Push/insert_tbz098l00", "[SQL ERR] 보증금 환불 메시지 발송내역 입력 오류!");
                 }
 
             }
             
         }
+
+
+        $season_srt_chk = $this->stay_m->get_season_srt_chk($stnd_dt);
+        info_log("Telegram_Push/", "season_srt_chk cnt = [" . $season_srt_chk->cnt . "]");
+        info_log("Telegram_Push/", "season_srt_chk fm_srt_dt = [" . $season_srt_chk->fm_srt_dt . "]");
+        info_log("Telegram_Push/", "season_srt_chk clm_val_nm = [" . $season_srt_chk->clm_val_nm . "]");
+
+        if ($season_srt_chk->cnt > 0)
+        {
+            $alarm_msg = $season_srt_chk->fm_srt_dt . " 부터 시작되는 " . $season_srt_chk->clm_val_nm . "  95일 전입니다!";
+
+            // 메시지 발송 부분
+            foreach($_TELEGRAM_CHAT_ID AS $_TELEGRAM_CHAT_ID_STR) {
+
+                $_TELEGRAM_QUERY_STR    = array(
+                    'chat_id' => $_TELEGRAM_CHAT_ID_STR,
+                    'text'    => $alarm_msg
+                );
+                
+                telegramApiRequest("sendMessage", $_TELEGRAM_QUERY_STR);
+
+                $this->db->trans_begin();
+
+                $i_data = array('message' => $alarm_msg
+                               ,'chat_id' => $_TELEGRAM_CHAT_ID_STR
+                               );
+
+                $result = $this->stay_m->insert_tbz098l00($i_data);
+
+                if ($result)
+                {
+                    $this->db->trans_commit();
+                    info_log("Telegram_Push/", "시즌 시작 전 알림 메시지 발송내역 입력 완료!");
+                }
+                else
+                {
+                    info_log("Telegram_Push/insert_tbz098l00", "last_query  = [" . $this->db->last_query() . "]");
+                    $this->db->trans_rollback();
+                    alert_log("Telegram_Push/insert_tbz098l00", "[SQL ERR] 시즌 시작 전 알림 메시지 발송내역 입력 오류!");
+                }
+
+            }
+            
+        }
+
 
         info_log("Telegram_Push/", "메시지 발송 완료!");
         info_log("Telegram_Push/", "================================================================================");

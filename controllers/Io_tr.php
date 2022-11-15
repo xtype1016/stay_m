@@ -727,7 +727,7 @@ class Io_tr extends CI_Controller
                 $io_tr_cls = $this->input->post('io_tr_cls', 'TRUE');
                 info_log("io_tr/ins/", "io_tr_cls = [" . $io_tr_cls . "]");
 
-                if (strcmp($io_tr_cls, "199") !=0)
+                if (strcmp($io_tr_cls, "199") != 0 && strcmp($io_tr_cls, "103") != 0)
                 {
                     $dup_chk = $this->stay_m->get_io_tr_cls_dup_chk(str_replace('-', '', $this->input->post('dt', 'TRUE')), $io_tr_cls);
 

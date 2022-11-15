@@ -1,4 +1,15 @@
 
+Dism /Online /Cleanup-Image /ScanHealth
+Dism /Online /Cleanup-Image /RestoreHealth
+sfc /SCANNOW
+
+#. release upgrade
+sudo apt update && apt upgrade -y
+sudo apt dist-upgrade
+sudo apt autoremove
+
+sudo apt install update-manager-core
+sudo do-release-upgrade
 
 
 #. yt-dlg
