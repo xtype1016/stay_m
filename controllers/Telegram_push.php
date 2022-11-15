@@ -165,7 +165,7 @@ class Telegram_push extends CI_Controller
 
         if ($season_srt_chk->cnt > 0)
         {
-            $alarm_msg = $season_srt_chk->fm_srt_dt . " 부터 시작되는 " . $season_srt_chk->clm_val_nm . "  95일 전입니다!";
+            $alarm_msg = $season_srt_chk->fm_srt_dt . " 부터 시작되는 " . $season_srt_chk->clm_val_nm . "  95일 전 입니다!";
 
             // 메시지 발송 부분
             foreach($_TELEGRAM_CHAT_ID AS $_TELEGRAM_CHAT_ID_STR) {
