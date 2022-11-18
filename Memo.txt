@@ -171,8 +171,9 @@ SELECT  '카드결제 & 기타 수입'  TR_NM
   FROM  tbb003l00
  WHERE  db_no = '0000000002'
    AND  del_yn = 'N'
-   AND  (io_tr_cls IN ('102', '199')
-         OR io_tr_cls >= '202')
+   AND  io_tr_cls NOT IN ('101', '201')
+--   AND  (io_tr_cls IN ('102', '199')
+--         OR io_tr_cls >= '202')
         )  a
  where  a.dt >= '20221101'
 order by  a.dt, AC_NO, mnpl_ymdh

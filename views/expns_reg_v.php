@@ -137,7 +137,7 @@
                 <div class="form-group form-group-sm row">
                     <label class="col-xs-4 control-label" for="memo"><h6><strong>내역</h6></strong></label>
                     <div class="col-xs-8">
-                        <input type="text" class="form-control" id="memo" name="memo" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { echo set_value('memo'); } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('memo', $view->memo); } ?>" placeholder="">
+                        <input type="text" class="form-control" id="memo" name="memo" maxlength="100" value="<?php if (strncmp($prcs_cls, 'i', 1) == 0) { echo set_value('memo'); } else if (strncmp($prcs_cls, 'u', 1) == 0) { echo set_value('memo', $view->memo); } ?>" placeholder="">
                     </div>
                 </div>
 
