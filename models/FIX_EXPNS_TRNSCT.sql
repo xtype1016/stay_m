@@ -30,7 +30,7 @@ BEGIN
     DECLARE _expns_chnl_cls VARCHAR(2);
     DECLARE _expns_cls      VARCHAR(5);
     DECLARE _whr_to_buy     VARCHAR(50);
-    DECLARE _memo           VARCHAR(50);
+    DECLARE _memo           VARCHAR(100);
     DECLARE _bank           VARCHAR(2);
     DECLARE _ac_no          VARCHAR(20);
     DECLARE _rel_ac_no      VARCHAR(20);
@@ -82,7 +82,16 @@ BEGIN
                                                         FROM  tba004l00  a
                                                        WHERE  a.dt = _stnd_dt
                                                      )
-           AND  a.del_yn = 'N';
+           AND  a.del_yn = 'N'
+           AND  NOT EXISTS (
+                            SELECT  1
+                              FROM  tbb001l00  z
+                             WHERE  z.DB_NO = a.DB_NO
+                               AND  z.expns_dt = _stnd_dt
+                               AND  z.mnpl_ip  = 'FIX_EXPNS_TRNSCT'
+                               AND  z.FIX_EXPNS_SRNO = a.FIX_EXPNS_SRNO
+                           )
+           ;
 
     /* 커서 종료조건 : 더이상 없다면 종료 */
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET _done = TRUE;
@@ -117,15 +126,20 @@ BEGIN
         SET _prcs_cnt = _prcs_cnt + 1;
 
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_prcs_cnt = ', IFNULL(_prcs_cnt, 'NULL')), NOW());
-
+        
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_fix_expns_srno = ', IFNULL(_fix_expns_srno, 'NULL')), NOW());
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_expns_nm = ', IFNULL(_expns_nm, 'NULL')), NOW());
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_sttlmt_yn = ', IFNULL(_sttlmt_yn, 'NULL')), NOW());
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_io_tr_cls = ', IFNULL(_io_tr_cls, 'NULL')), NOW());
-        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_memo = ', IFNULL(_memo, 'NULL')), NOW());
-        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_expns_nm = ', IFNULL(_expns_nm, 'NULL')), NOW());
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_expns_chnl_cls = ', IFNULL(_expns_chnl_cls, 'NULL')), NOW());
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_expns_cls = ', IFNULL(_expns_cls, 'NULL')), NOW());
         INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_whr_to_buy = ', IFNULL(_whr_to_buy, 'NULL')), NOW());
-        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_fix_expns_srno = ', IFNULL(_fix_expns_srno, 'NULL')), NOW());
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_memo = ', IFNULL(_memo, 'NULL')), NOW());
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_bank = ', IFNULL(_bank, 'NULL')), NOW());
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_ac_no = ', IFNULL(_ac_no, 'NULL')), NOW());
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_rel_ac_no = ', IFNULL(_rel_ac_no, 'NULL')), NOW());
+        INSERT INTO tbz099l00 (PGM_NM, MEMO, MNPL_YMDH) VALUES('FIX_EXPNS_TRNSCT', concat('_amt = ', IFNULL(_amt, 'NULL')), NOW());
+        
 
         /* Loop 안에서 매번 Commit or Rollback 처리 */
         START TRANSACTION;
