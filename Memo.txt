@@ -1,4 +1,11 @@
 
+#. 건조기 구입
+전액 신한카드 결제 > 현대카드 발급 > 신한카드 30만원 취소 > 현대카드 30만원 결제 > 
+11월말에 15만원 이상 이용시 12만원 포인트 적립
+> 12월에 신한카드 140만원 취소, 현대카드 70 + 70 결제시에 12만원 포인트 처리됨
+
+
+
 Dism /Online /Cleanup-Image /ScanHealth
 Dism /Online /Cleanup-Image /RestoreHealth
 sfc /SCANNOW
