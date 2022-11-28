@@ -1658,13 +1658,16 @@ class Rsvt extends CI_Controller
             //$std_end_dt = substr($end_dt, 0, 4) . "/" . substr($end_dt, 4, 2) . "/" . substr($end_dt, 6, 2);
             $std_end_dt = substr($end_dt_1, 0, 4) . "/" . substr($end_dt_1, 4, 2) . "/" . substr($end_dt_1, 6, 2);
 
+            //2022.11.28 숙소 평수 안내 삭제
             if (strncmp($hsrm_cls, "01", 2) == 0)
             {
-                $hsrm_cls_nm = "19평 이틀동";
+                //$hsrm_cls_nm = "19평 이틀동";
+                $hsrm_cls_nm = "이틀동";
             }
             else if (strncmp($hsrm_cls, "02", 2) == 0)
             {
-                $hsrm_cls_nm = "21평 사흘동";
+                //$hsrm_cls_nm = "21평 사흘동";
+                $hsrm_cls_nm = "사흘동";
             }
             else
             {
@@ -1754,7 +1757,7 @@ class Rsvt extends CI_Controller
                 $info_msg2 = "장기 숙박 할인 조건 안내 \n\n"
                            . "현재 " . $days_cnt . "박으로 문의주셔서 " . $discount_rt . "%의 할인을 해드리는 조건으로 예약이 가능합니다. \n\n"
                            . "세부 사항으로는 \n"
-                           . " - 보통 3박 이상의 연박시에는 저희가 2박째마다 수건과 쓰레기를 치워드리는데 할인 조건시에는 세탁기로 직접 수건을 세탁해 쓰시고,\n\n"
+                           . " - 할인 조건시에는 세탁기로 직접 수건을 세탁해 쓰시고,\n\n"
                            . " - 음식물/재활용/일반 쓰레기는 체크아웃하시는 날까지 차로 5분 거리의 클린하우스에 직접 배출하셔야 함을 양지해 주세요. (클린하우스 위치는 별도 안내드리겠습니다) \n"
                            . "   꼭 마지막 날 쓰레기도 모두 비워서 클린하우스에 버려주세요.\n\n"
                            . " - 세제와 휴지통용 비닐, 종량제 봉투, 그리고 음식물 쓰레기 배출용 티머니 카드는 저희가 준비해 놓겠습니다.\n\n"
@@ -1852,14 +1855,14 @@ class Rsvt extends CI_Controller
             // 메시지 생성
             info_log("rsvt/cnfm_msg/", "gst_nm      = [" . $rsvt_info->gst_nm . "]"     , $log_lvl);
 
-            if (strcmp($rsvt_info->hsrm_cls, "01") == 0)
-            {
-                $hsrm_cls_size = "19평";
-            }
-            else if (strcmp($rsvt_info->hsrm_cls, "02") == 0)
-            {
-                $hsrm_cls_size = "21평";
-            }
+            //if (strcmp($rsvt_info->hsrm_cls, "01") == 0)
+            //{
+            //    $hsrm_cls_size = "19평";
+            //}
+            //else if (strcmp($rsvt_info->hsrm_cls, "02") == 0)
+            //{
+            //    $hsrm_cls_size = "21평";
+            //}
 
             info_log("rsvt/cnfm_msg/", "hsrm_cls  = [" . $rsvt_info->hsrm_cls . "]"    , $log_lvl);
             info_log("rsvt/cnfm_msg/", "srt_dt    = [" . $rsvt_info->srt_dt . "]" , $log_lvl);
@@ -1893,9 +1896,28 @@ class Rsvt extends CI_Controller
                 $gst_cnt_msg = $gst_cnt_msg . ", 자녀 " . $rsvt_info->chld_cnt . "분";
             }
     
+            //2022.11.28 숙소 평수 안내 삭제
+            //$cnfm_msg = "안녕하세요, " . $rsvt_info->gst_nm . "님!\n\n"
+            //          . $rsv_term_msg . "\n"
+            //          . "머무른채 " . $rsvt_info->hsrm_cls_nm . " " . $hsrm_cls_size . "에\n"
+            //          . $gst_cnt_msg . " 입금 확인되어 예약 확정되었습니다.\n\n"
+            //          . "입실은 오후 5시 이후이며\n"
+            //          . "퇴실은 오전 11시까지입니다.\n\n"
+            //          . "오시는 날,\n"
+            //          . "주소 안내 문자를 보내드리겠습니다.\n\n"
+            //          . "건강히 설레임 가득한 여행 준비하시고,\n"
+            //          . "그 날 인사드리겠습니다.\n\n"
+            //          . "저희는 머무르시는 동안 아늑하고 편안하게 지내실 수 있도록 정갈하게 준비할게요!\n\n"
+            //          . "감사합니다. :)\n\n\n"
+            //          . "*예약자와 입금자가 다를 경우에는 예약자 성함, \n"
+            //          . " 예약자가 숙박하지 않고 대신 예약해주는 경우에는 숙박자 대표의\n"
+            //          . " 성함과 연락처도 알려주시기 바랍니다.\n\n"
+            //          . "*자녀와 함께 오시는 경우 성별과 나이를 알려주시면 세팅에 참고가 될 거 같습니다. ^^\n\n"
+            //          ;
+    
             $cnfm_msg = "안녕하세요, " . $rsvt_info->gst_nm . "님!\n\n"
                       . $rsv_term_msg . "\n"
-                      . "머무른채 " . $rsvt_info->hsrm_cls_nm . " " . $hsrm_cls_size . "에\n"
+                      . "머무른채 " . $rsvt_info->hsrm_cls_nm . "에\n"
                       . $gst_cnt_msg . " 입금 확인되어 예약 확정되었습니다.\n\n"
                       . "입실은 오후 5시 이후이며\n"
                       . "퇴실은 오전 11시까지입니다.\n\n"
@@ -1910,7 +1932,7 @@ class Rsvt extends CI_Controller
                       . " 성함과 연락처도 알려주시기 바랍니다.\n\n"
                       . "*자녀와 함께 오시는 경우 성별과 나이를 알려주시면 세팅에 참고가 될 거 같습니다. ^^\n\n"
                       ;
-    
+
             info_log("rsvt/cnfm_msg/", "cnfm_msg      = [" . $cnfm_msg . "]"   , $log_lvl);
         }
 
