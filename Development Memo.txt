@@ -1,5 +1,21 @@
 Development Memo
 
+
+// 
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+	  //디버그 배너 삭제
+      debugShowCheckedModeBanner: false,
+      title: 'ToDo App',
+      theme: ThemeData(primarySwatch: Colors.red),
+      home: FirstPage(),
+    );
+  }
+
 #. To Do Project(Flutter)
 	- 시작일 있는 경우 / 없는 경우(기한 없는 작업)
 		>> 일별 할일 관리

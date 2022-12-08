@@ -85,7 +85,7 @@ Class Auth extends CI_Controller
             if ($this->form_validation->run() == TRUE)
             {
                 $options = [
-                            'cost' => 15
+                            'cost' => 10
                            ];
 
                 $usr_id = $this->input->post('usr_id'  , 'TRUE');

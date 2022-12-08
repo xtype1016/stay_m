@@ -205,6 +205,21 @@ class Stay_m extends CI_Model
     }
 
 
+    public function update_tba001i00_1($arr_data)
+    {
+        $u_data = array('pswd'       => $arr_data['pswd']
+                       ,'mnpl_ip'    => $arr_data['ip_addr']
+                       ,'mnpl_ymdh'  => date("YmdHis")
+                       );
+
+        $this->db->where('usr_id = ', $arr_data['usr_id']);
+
+        $result = $this->db->update('tba001i00', $u_data);
+
+        return $result;
+    }
+
+
     public function get_usr_info($usr_id)
     {
         //$input_client_id = $this->input->get_request_header('Client-ID', TRUE);

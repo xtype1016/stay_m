@@ -9,6 +9,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $CI =& get_instance();
         $CI->load->helper('alert_log');
 
+        info_log("login_chk", "usr_no = [" . $_SESSION['usr_no'] . "]");
+
         if (!isset($_SESSION['usr_no']))
         {
             //$usr_no = get_cookie('usr_no');
@@ -24,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         else
         {
-            alert_log("login_chk/", "잘못된 접근입니다!", base_url("milla/auth/login/r"));
+            alert_log("login_chk/", "잘못된 접근입니다!", base_url("auth/login/r"));
         //    info_log("login_chk", "로그인정보 존재! usr_no = [" . $_SESSION['usr_no'] . "]");
         //    $cntrlr = $CI->uri->segment(1);
         //

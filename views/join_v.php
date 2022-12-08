@@ -80,6 +80,7 @@
         <div class="form-group">
             <div class="pull-right">
                 <button type="submit" class="btn btn-primary" id="join_btn">가입</button>
+                <button type="submit" class="btn btn-default btn-sm" id="join_upd_btn" formaction="/join/upd">비밀번호 변경</button>
             </div>
         </div>
     <?php echo form_close(); ?>
