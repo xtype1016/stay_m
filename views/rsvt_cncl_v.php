@@ -134,7 +134,7 @@
         <div class="panel-body">
             <?php echo form_open('', 'class="form-horizontal" id="rsvt_cncl_form"'); ?>
                 <div class="form-group form-group-sm row">
-                    <label class="col-xs-4 control-label" for="cncl_dt"><h6><strong><?php if (strncmp($view->rsv_chnl_cls, '1', 1) == 0) { echo '취소일자'; } else if (strncmp($view->rsv_chnl_cls, '2', 1) == 0) { echo '취소일자 / 입금일자'; }  ?></h6></strong></label>
+                    <label class="col-xs-4 control-label" for="cncl_dt"><h6><strong><?php if (strncmp($view->rsv_chnl_cls, '1', 1) == 0 || strncmp($view->rsv_chnl_cls, '3', 1) == 0) { echo '취소일자'; } else if (strncmp($view->rsv_chnl_cls, '2', 1) == 0) { echo '취소일자 / 입금일자'; }  ?></h6></strong></label>
                     <div class="col-xs-4">
                         <input type="text" class="form-control" id="cncl_dt" name="cncl_dt" autocomplete="off" value="<?php if (strncmp($prcs_cls, 'u', 1) == 0) { echo $etc_incm_view->stnd_cncl_dt; } else { echo set_value('cncl_dt', $stnd_dt); } ?>">
                     </div>
@@ -146,7 +146,7 @@
                 </div>
 
                 <div class="form-group form-group-sm row">
-                    <label class="col-xs-4 control-label" for="amt"><h6><strong><?php if (strncmp($view->rsv_chnl_cls, '1', 1) == 0) { echo '환불금액'; } else if (strncmp($view->rsv_chnl_cls, '2', 1) == 0) { echo '취소후 입금금액'; }  ?></h6></strong></label>
+                    <label class="col-xs-4 control-label" for="amt"><h6><strong><?php if (strncmp($view->rsv_chnl_cls, '1', 1) == 0 || strncmp($view->rsv_chnl_cls, '3', 1) == 0) { echo '환불금액'; } else if (strncmp($view->rsv_chnl_cls, '2', 1) == 0) { echo '취소후 입금금액'; }  ?></h6></strong></label>
                     <div class="col-xs-8">
                         <?php if (strncmp($prcs_cls, 'u', 1) == 0) { ?>
                             <input type="text" class="form-control" id="amt" name="amt" value="<?php if (isset($etc_incm_view)) { echo number_format($etc_incm_view->amt); } ?>" onkeyup="inputNumberFormat(this)">
@@ -163,6 +163,7 @@
                     </div>
                 </div>
 
+                <!-- 2022.12.11. 주거래 계좌를 통해 입출금 하므로 더이상 기능 사용하지 않음
                 <div class="form-group form-group-sm row">
                     <label class="col-xs-4 control-label" for="othr_withdraw_yn"><h6><strong>타계좌출금여부</h6></strong></label>
                     <div class="col-xs-8">
@@ -173,13 +174,14 @@
                         </div>
                     </div>
                 </div>
+                -->
 
                 <input type="hidden" name="evnt_id" value="<?php if (strncmp($prcs_cls, 'i', 1) != 0) { echo $view->evnt_id; } else { echo ''; } ?>" >
                 <input type="hidden" name="rsv_srno" value="<?php echo $rsv_srno; ?>" >
                 <input type="hidden" name="b_rsv_chnl_cls" value="<?php echo $view->rsv_chnl_cls; ?>" >
                 <input type="hidden" name="b_rcv_dt" value="<?php echo $stnd_rcv_dt; ?>" >
                 <input type="hidden" name="tr_srno" value="<?php if (isset($tr_srno)) {echo $tr_srno; } ?>" >
-                <input type="hidden" name="tr_cls" value="<?php if (strncmp($view->rsv_chnl_cls, '1', 1) == 0) { echo '03'; } else if (strncmp($view->rsv_chnl_cls, '2', 1) == 0) { echo '04'; }  ?>" >
+                <input type="hidden" name="tr_cls" value="<?php if (strncmp($view->rsv_chnl_cls, '1', 1) == 0) { echo '11'; } else if (strncmp($view->rsv_chnl_cls, '2', 1) == 0) { echo '12'; } else if (strncmp($view->rsv_chnl_cls, '3', 1) == 0) { echo '13'; }  ?>" >
                 <input type="hidden" name="deposit" value="<?php if (isset($view->deposit)) {echo $view->deposit; } ?>" >
                 <input type="hidden" name="gst_nm" value="<?php if (isset($view->gst_nm)) {echo $view->gst_nm; } ?>" >
 

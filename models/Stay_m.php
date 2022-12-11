@@ -660,6 +660,7 @@ class Stay_m extends CI_Model
                                         ,sum(a.this_year_amt)      this_year_amt
                                    from  (
                                          select  case when c.addtnl_info = '2' then '2'
+                                                      when c.addtnl_info = '3' then '3'
                                                       else '1'
                                                  end chnl_cls
                                                 ,b.hsrm_cls
@@ -678,7 +679,7 @@ class Stay_m extends CI_Model
                                             and  b.db_no = a.db_no
                                             and  b.rsv_srno = a.rsv_srno
                                             and  c.db_no in ('0000000000', a.db_no)
-                                            and  c.clm_nm = 'tr_cls'
+                                            and  c.clm_nm = 'TR_CLS'
                                             and  c.clm_val = a.tr_cls
                                          )  a
                                   group by  case when ? = '1' then a.hsrm_cls
@@ -723,8 +724,8 @@ class Stay_m extends CI_Model
                           limit  ?, ?
                         ) a  left join  tba003i00  b
                                     on  b.db_no in ('0000000000', ?)
-                                   and  b.clm_nm = case when ? = '1' then 'hsrm_cls'
-                                                        when ? = '2' then 'rsv_chnl_cls'
+                                   and  b.clm_nm = case when ? = '1' then 'HSRM_CLS'
+                                                        when ? = '2' then 'RSV_CHNL_CLS'
                                                    end
                                    and  b.clm_val = a.sum_cls
                    order by  ifnull(a.sum_cls, '99')";
@@ -769,7 +770,7 @@ class Stay_m extends CI_Model
             return;
         } else {
             if ($prcs_cls == 'data') {
-                //info_log("get_incm_smmry", "last_query  = [" . $this->db->last_query() . "]");
+                info_log("get_incm_smmry", "last_query  = [" . $this->db->last_query() . "]");
                 $result = $query->result();  // 객체 $result->board_id
 
                 if (!$result) {
@@ -1056,6 +1057,7 @@ class Stay_m extends CI_Model
                           ,d.clm_val_nm  rsv_chnl_cls_nm
                           ,case when a.rsv_chnl_cls = '1' then '[BL]'
                                 when a.rsv_chnl_cls = '2' then '[AB]'
+                                when a.rsv_chnl_cls = '3' then '[NV]'
                            end  g_rsv_chnl_cls
                           ,a.gst_desc
                           ,a.adlt_cnt

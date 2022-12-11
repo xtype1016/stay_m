@@ -446,6 +446,21 @@ class Rsvt extends CI_Controller
                     }
                     $tr_dt = $result->rcv_dt;
                 }
+                //2022.12.11 네이버 채널 추가 Begin
+                else if (strcmp($rsv_chnl_cls, "3") == 0)
+                {
+                    $tr_cls = "03";
+                    $tr_memo = "네이버 예약금 입금";
+                    $tr_dt = $cnfm_dt;
+                }
+                else
+                {
+                    info_log("rsvt/ins/예약금 입금", "rsv_chnl_cls  = [" . $rsv_chnl_cls . "]");
+                    $this->db->trans_rollback();
+                    alert_log("rsvt/ins/예약금 입금", "[SQL ERR] 미존재 예약 채널!");
+                }
+                //2022.12.11 네이버 채널 추가 End
+
                 $tr_srno = $this->stay_m->get_clm_sr_val('TR_SRNO');
 
                 info_log("rsvt/ins/예약금 입금/", "tr_srno   = [" . $tr_srno . "]");
@@ -567,13 +582,13 @@ class Rsvt extends CI_Controller
                 // 예약확정일이 시작일보다 작으면 오류
                 if (strncmp($cnfm_dt, $srt_dt, 8) > 0)
                 {
-                    alert_log("rsvt/ins", "예약확정일자가 시작일보다 늦습니다!");
+                    alert_log("rsvt/upd", "예약확정일자가 시작일보다 늦습니다!");
                 }
 
                 // 시작일이 종료일보다 작으면 오류
                 if (strncmp($srt_dt, $end_dt, 8) > 0)
                 {
-                    alert_log("rsvt/ins", "시작일자가 종료일보다 늦습니다!");
+                    alert_log("rsvt/upd", "시작일자가 종료일보다 늦습니다!");
                 }
 
                 if ($this->input->post('gst_desc', 'TRUE') != '')
@@ -673,7 +688,30 @@ class Rsvt extends CI_Controller
 
                     $bef_tr_dt = $qry_result->rcv_dt;
                 }
+                else if (strcmp($rsvt_info->rsv_chnl_cls, "3") == 0)
+                {
+                    $bf_tr_cls = "03";
+                    $bef_tr_dt = $rsvt_info->cnfm_dt;
+                }
+                else
+                {
+                    info_log("rsvt/upd/", "rsv_chnl_cls  = [" . $rsvt_info->rsv_chnl_cls . "]");
+                    $this->db->trans_rollback();
+                    alert_log("rsvt/upd/", "미존재 예약채널!");
+                }
+
                 info_log("rsvt/upd", "bef_tr_dt = [" . $bef_tr_dt . "]");
+
+                $qry_result = $this->stay_m->get_tr_srno($rsv_srno, $bef_tr_dt, $bf_tr_cls);
+                if (!$qry_result)
+                {
+                    info_log("rsvt/upd/get_tr_srno", "last_query  = [" . $this->db->last_query() . "]");
+                    $this->db->trans_rollback();
+                    alert_log("rsvt/upd/get_tr_srno", "거래일련번호 조회 오류!");
+                }
+
+                $tr_srno = $qry_result->tr_srno;
+                info_log("rsvt/upd", "tr_srno    = [" . $tr_srno . "]");
 
                 if (strcmp($rsv_chnl_cls, "1") == 0)
                 {
@@ -695,19 +733,20 @@ class Rsvt extends CI_Controller
                     }
                     $tr_dt = $qry_result->rcv_dt;
                 }
-
-                info_log("rsvt/upd", "tr_dt = [" . $tr_dt . "]");
-
-                $qry_result = $this->stay_m->get_tr_srno($rsv_srno, $bef_tr_dt, $bf_tr_cls);
-                if (!$qry_result)
+                else if (strcmp($rsv_chnl_cls, "3") == 0)
                 {
-                    info_log("rsvt/upd/get_tr_srno", "last_query  = [" . $this->db->last_query() . "]");
+                    $tr_cls = "03";
+                    $tr_memo = "네이버 예약금 입금";
+                    $tr_dt = $cnfm_dt;
+                }
+                else
+                {
+                    info_log("rsvt/upd/", "rsv_chnl_cls!!  = [" . $rsv_chnl_cls . "]");
                     $this->db->trans_rollback();
-                    alert_log("rsvt/upd/get_tr_srno", "거래일련번호 조회 오류!");
+                    alert_log("rsvt/upd/", "미존재 예약채널!");
                 }
 
-                $tr_srno = $qry_result->tr_srno;
-                info_log("rsvt/upd", "tr_srno    = [" . $tr_srno . "]");
+                info_log("rsvt/upd", "tr_dt = [" . $tr_dt . "]");
 
                 $u_data = array('tr_srno'          => $tr_srno
                                ,'rsv_srno'         => $rsv_srno
@@ -958,7 +997,7 @@ class Rsvt extends CI_Controller
 
                         //==============================================================================
                         //2020.12.30. AB의 경우 예상 입금일로 거래일자 설정
-                        if (strncmp($b_rsv_chnl_cls, "1", 1) == 0)
+                        if (strncmp($b_rsv_chnl_cls, "1", 1) == 0 || strncmp($b_rsv_chnl_cls, "3", 1) == 0)
                         {
                             $tr_dt = str_replace('-', '', $this->input->post('cncl_dt', 'TRUE'));
                         }
@@ -989,6 +1028,12 @@ class Rsvt extends CI_Controller
                                 $this->db->trans_rollback();
                                 alert_log("rsvt/cncl/update_tba006l00_2", "AB 기존 거래 취소 처리 오류!");
                             }
+                        }
+                        else
+                        {
+                            info_log("rsvt/cncl/", "b_rsv_chnl_cls  = [" . $b_rsv_chnl_cls . "]");
+                            $this->db->trans_rollback();
+                            alert_log("rsvt/cncl/", "미존재 예약채널!");
                         }
 
                         info_log("rsvt/cncl", "tr_dt     = [" . $tr_dt . "]");
@@ -1099,7 +1144,7 @@ class Rsvt extends CI_Controller
                         info_log("rsvt/cncl", "예약 취소 완료!");
                         info_log("rsvt/cncl", "================================================================================");
 
-                        redirect(base_url("rsvt/list"));
+                        redirect(base_url("rsvt/cncl_list"));
 
                     }
                 }
@@ -1194,7 +1239,7 @@ class Rsvt extends CI_Controller
                     {
                         //==============================================================================
                         //2020.12.30. AB의 경우 예상 입금일로 거래일자 설정
-                        if (strncmp($b_rsv_chnl_cls, "1", 1) == 0)
+                        if (strncmp($b_rsv_chnl_cls, "1", 1) == 0 || strncmp($b_rsv_chnl_cls, "3", 1) == 0)
                         {
                             $tr_dt = str_replace('-', '', $this->input->post('cncl_dt', 'TRUE'));
                         }
