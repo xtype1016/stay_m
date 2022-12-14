@@ -1561,9 +1561,9 @@ class Rsvt extends CI_Controller
                 // 2019.07.11. 성수기의 경우 숙박기간 중 공휴일 포함시 연박할인 제외 하지 않음
                 // 2021.04.13. 성수기 연박할인 삭제
                 // 숙박 1일차 || 준성수기 || 공휴일 || 성수기
-                //if ($r_dt->rnum == 1 || $dt_prc->season_cls == '2' || $dt_prc->dt_cls == '3' || ($r_dt->rnum == 2 && $dt_prc->season_cls == '1'))
-                //if ($r_dt->rnum == 1 || $dt_prc->season_cls == '2' || ($dt_prc->dt_cls == '3' && $dt_prc->season_cls != '1') || ($r_dt->rnum == 2 && $dt_prc->season_cls == '1'))
-                if ($r_dt->rnum == 1 || $dt_prc->season_cls == '2' || ($dt_prc->dt_cls == '3') || ($dt_prc->season_cls == '1'))
+                //2022.12.14. 연박할인은 3박 부터 적용 추가
+                //if ($r_dt->rnum == 1 || $dt_prc->season_cls == '2' || ($dt_prc->dt_cls == '3') || ($dt_prc->season_cls == '1'))
+                if ($r_dt->rnum == 1 || $r_dt->rnum == 2 || $dt_prc->season_cls == '2' || ($dt_prc->dt_cls == '3') || ($dt_prc->season_cls == '1'))
                 {
                     $tmp_prc = $dt_prc->prc;
                     info_log("rsvt/prc", "tmp_prc1      = [" . $tmp_prc . "]", $log_lvl);
