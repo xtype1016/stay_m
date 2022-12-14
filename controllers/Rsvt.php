@@ -1541,17 +1541,18 @@ class Rsvt extends CI_Controller
                 info_log("rsvt/prc", "prc         = [" . $dt_prc->prc . "]"        , $log_lvl);
                 info_log("rsvt/prc", "cntnu_dscnt = [" . $dt_prc->cntnu_dscnt . "]", $log_lvl);
 
+                // 2022.12.14 2박 추가요금 체계 삭제
                 // 2021.05.05. 1박의 경우 3만원, 2박의 경우 1박당 2만원 추가 요금 부가
-                if ($days_cnt == 1)
-                {
-                    $dt_prc->prc = $dt_prc->prc + 3;
-                    info_log("rsvt/prc", "prc 1박 = [" . $dt_prc->prc . "]"        , $log_lvl);
-                }
-                else if ($days_cnt == 2)
-                {
-                    $dt_prc->prc = $dt_prc->prc + 2;
-                    info_log("rsvt/prc", "prc 2박 = [" . $dt_prc->prc . "]"        , $log_lvl);
-                }
+                //if ($days_cnt == 1)
+                //{
+                //    $dt_prc->prc = $dt_prc->prc + 3;
+                //    info_log("rsvt/prc", "prc 1박 = [" . $dt_prc->prc . "]"        , $log_lvl);
+                //}
+                //else if ($days_cnt == 2)
+                //{
+                //    $dt_prc->prc = $dt_prc->prc + 2;
+                //    info_log("rsvt/prc", "prc 2박 = [" . $dt_prc->prc . "]"        , $log_lvl);
+                //}
                 // 2021.05.05. 1박의 경우 3만원, 2박의 경우 1박당 2만원 추가 요금 부가
 
 
