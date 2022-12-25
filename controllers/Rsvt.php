@@ -1541,6 +1541,26 @@ class Rsvt extends CI_Controller
                 info_log("rsvt/prc", "prc         = [" . $dt_prc->prc . "]"        , $log_lvl);
                 info_log("rsvt/prc", "cntnu_dscnt = [" . $dt_prc->cntnu_dscnt . "]", $log_lvl);
 
+                // 2022.12.25 사흘동 요금 = 이틀동 요금 + 10,000원 추가, 숙소별 로직 위치 이동
+                //2022.11.28 숙소 평수 안내 삭제
+                if (strncmp($hsrm_cls, "01", 2) == 0)
+                {
+                    //$hsrm_cls_nm = "19평 이틀동";
+                    $hsrm_cls_nm = "이틀동";
+                }
+                else if (strncmp($hsrm_cls, "02", 2) == 0)
+                {
+                    //$hsrm_cls_nm = "21평 사흘동";
+                    $hsrm_cls_nm = "사흘동";
+                    $dt_prc->prc = $dt_prc->prc + 1;
+                }
+                else
+                {
+                    alert_log("rsvt/prc", "[PRCS ERR] 숙소구분 오류[" . $hsrm_cls . "]!");
+                }
+
+                info_log("rsvt/prc", "사흘동 prc    = [" . $dt_prc->prc . "]"        , $log_lvl);
+
                 // 2022.12.14 2박 추가요금 체계 삭제
                 // 2021.05.05. 1박의 경우 3만원, 2박의 경우 1박당 2만원 추가 요금 부가
                 //if ($days_cnt == 1)
@@ -1703,22 +1723,6 @@ class Rsvt extends CI_Controller
             // 2019.04.16. 종료일을 체크아웃 기준으로 변경
             //$std_end_dt = substr($end_dt, 0, 4) . "/" . substr($end_dt, 4, 2) . "/" . substr($end_dt, 6, 2);
             $std_end_dt = substr($end_dt_1, 0, 4) . "/" . substr($end_dt_1, 4, 2) . "/" . substr($end_dt_1, 6, 2);
-
-            //2022.11.28 숙소 평수 안내 삭제
-            if (strncmp($hsrm_cls, "01", 2) == 0)
-            {
-                //$hsrm_cls_nm = "19평 이틀동";
-                $hsrm_cls_nm = "이틀동";
-            }
-            else if (strncmp($hsrm_cls, "02", 2) == 0)
-            {
-                //$hsrm_cls_nm = "21평 사흘동";
-                $hsrm_cls_nm = "사흘동";
-            }
-            else
-            {
-                alert_log("rsvt/prc", "[PRCS ERR] 숙소구분 오류[" . $hsrm_cls . "]!");
-            }
 
             $arr_prc_cls_desc_cnt = count($arr_prc_cls_desc);
 
