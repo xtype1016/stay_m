@@ -106,7 +106,7 @@ class Stay_m extends CI_Model
 
             if (strncmp($clm_nm, "USR_NO", 6) == 0 || strncmp($clm_nm, "GST_NO", 6) == 0) {
                 $nxt_val = sprintf("%010d", (int)$q_result->clm_val + 1);
-            } elseif (strncmp($clm_nm, "TR_CLS", 6) == 0          || strncmp($clm_nm, "EXPNS_CLS", 6) == 0 ||
+            } elseif (strncmp($clm_nm, "TR_CLS", 6) == 0         || strncmp($clm_nm, "EXPNS_CLS", 6) == 0 ||
                      strncmp($clm_nm, "EXPNS_CHNL_CLS", 14) == 0 || strncmp($clm_nm, "HSRM_CLS", 8) == 0  ||
                      strncmp($clm_nm, "IO_TR_CLS", 9) == 0
                     ) {
@@ -208,11 +208,11 @@ class Stay_m extends CI_Model
     public function update_tba001i00_1($arr_data)
     {
         $u_data = array('pswd'       => $arr_data['pswd']
-                       ,'mnpl_ip'    => $arr_data['ip_addr']
+                       ,'mnpl_ip'    => $_SESSION['ip_addr']
                        ,'mnpl_ymdh'  => date("YmdHis")
                        );
 
-        $this->db->where('usr_id = ', $arr_data['usr_id']);
+        $this->db->where('usr_no = ', $_SESSION['usr_no']);
 
         $result = $this->db->update('tba001i00', $u_data);
 
@@ -624,9 +624,9 @@ class Stay_m extends CI_Model
         $last_yr_mon    = $result->last_yr_mon;
         $this_yr_af_mon = $result->this_yr_af_mon;
 
-        info_log("get_incm_smmry/last_yr_mon", "last_yr_bf_mon    = " . $last_yr_bf_mon);
-        info_log("get_incm_smmry/last_yr_mon", "last_yr_mon       = " . $last_yr_mon);
-        info_log("get_incm_smmry/last_yr_mon", "this_yr_af_mon    = " . $this_yr_af_mon);
+        //info_log("get_incm_smmry/last_yr_mon", "last_yr_bf_mon    = " . $last_yr_bf_mon);
+        //info_log("get_incm_smmry/last_yr_mon", "last_yr_mon       = " . $last_yr_mon);
+        //info_log("get_incm_smmry/last_yr_mon", "this_yr_af_mon    = " . $this_yr_af_mon);
 
         $result ='';
 
@@ -770,7 +770,7 @@ class Stay_m extends CI_Model
             return;
         } else {
             if ($prcs_cls == 'data') {
-                info_log("get_incm_smmry", "last_query  = [" . $this->db->last_query() . "]");
+                //info_log("get_incm_smmry", "last_query  = [" . $this->db->last_query() . "]");
                 $result = $query->result();  // 객체 $result->board_id
 
                 if (!$result) {
@@ -1950,7 +1950,7 @@ class Stay_m extends CI_Model
                                 ,e.gst_nm
                                 ,a.rsv_chnl_cls
                                 ,c.clm_val_nm rsv_chnl_cls_nm
-                                ,sum(case when d.tr_cls = '03' then d.amt else 0 end)    refund_amt
+                                ,sum(case when d.tr_cls in ('11', '13') then d.amt else 0 end)    refund_amt
                            from  tba005l00 a, tba003i00 b, tba003i00 c, tba006l00 d, tba007l00 e
                           where  a.db_no = ?
                             and  a.cncl_dt like concat(?, '%')
@@ -1965,7 +1965,7 @@ class Stay_m extends CI_Model
                             and  d.db_no = a.db_no
                             and  d.rsv_srno = a.rsv_srno
                             and  d.del_yn = 'N'
-                            and  d.tr_cls in ('03', '04')
+                            and  d.tr_cls like '1%'
                             and  e.db_no = a.db_no
                             and  e.gst_no = a.gst_no
                           group by  a.rsv_srno

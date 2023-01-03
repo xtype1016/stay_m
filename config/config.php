@@ -143,7 +143,8 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+// $config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------
@@ -471,13 +472,16 @@ $config['global_xss_filtering'] = TRUE;
 | 'csrf_expire' = The number in seconds the token should expire.
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
+    'todo_api/.*+'
 */
 $config['csrf_protection'] = TRUE;
 $config['csrf_token_name'] = 'csrf_tk_nm';
 $config['csrf_cookie_name'] = 'csrf_ck_nm';
 $config['csrf_expire'] = 1800;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_exclude_uris'] = array(
+    'todo_api/.*+'
+);
 
 /*
 |--------------------------------------------------------------------------

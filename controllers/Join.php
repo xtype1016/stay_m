@@ -139,78 +139,65 @@ Class Join extends CI_Controller
 
         if ($_POST)
         {
-            $this->form_validation->set_rules('usr_id'       , '아이디'      , 'trim|required|valid_email');
             $this->form_validation->set_rules('password'     , '비밀번호'    , 'trim|required|min_length[8]|matches[password_re]');
             $this->form_validation->set_rules('password_re'  , '비밀번호확인', 'trim|required');
 
             if ($this->form_validation->run() == TRUE)
             {
-                $usr_id = $this->input->post('usr_id', 'TRUE');
-
                 $this->db->trans_begin();
 
-                $ip_addr = get_ip();
-                //info_log("join", "ip_addr = [" . $ip_addr . "]");
+                $options = [
+                            'cost' => 10
+                            ];
+                //PASSWORD_DEFAULT: Note that this constant is designed to change over time as new and stronger algorithms are added to PHP.
+                //password_hash("rasmuslerdorf", PASSWORD_DEFAULT, $options)
 
-                //info_log("join", "usr_no = [" . $usr_no . "]");
+                $u_data = array('pswd'         => password_hash($this->input->post('password', 'TRUE'), PASSWORD_DEFAULT, $options)
+                                );
 
-                if (strlen($usr_id) > 0)
+                $result = $this->stay_m->update_tba001i00_1($u_data);
+
+                if ($result)
                 {
-                    $options = [
-                                'cost' => 10
-                               ];
-                    //PASSWORD_DEFAULT: Note that this constant is designed to change over time as new and stronger algorithms are added to PHP.
-                    //password_hash("rasmuslerdorf", PASSWORD_DEFAULT, $options)
-
-                    $u_data = array('usr_id'       => trim($this->input->post('usr_id', 'TRUE'))
-                                   ,'pswd'         => password_hash($this->input->post('password', 'TRUE'), PASSWORD_DEFAULT, $options)
-                                   ,'ip_addr'      => $ip_addr
-                                   );
-
-                    $result = $this->stay_m->update_tba001i00_1($u_data);
-
-                    if ($result)
-                    {
-                        // No data found/변경내용이 없을 경우, 다건 처리시 정상으로 리턴되어 추가로 확인 처리함
-                        $prcs_cnt = $this->db->affected_rows();
-                        if ($prcs_cnt != 1)
-                        {
-                            info_log("join/upd/update_tba001i00_1", "last_query  = [" . $this->db->last_query() . "]");
-                            $this->db->trans_rollback();
-                            alert_log("join/upd/update_tba001i00_1", "[SQL ERR] 회원정보 수정 건수 오류[" . $prcs_cnt . "]!");
-                        }
-                        else
-                        {
-                            $this->db->trans_commit();
-
-                            info_log("join/upd/", "회원정보 수정 완료!");
-                            info_log("join/upd/", "================================================================================");
-
-                            session_destroy();
-
-                            delete_cookie('usr_no');
-                            delete_cookie('idntfr');
-                            delete_cookie('tkn');
-
-                            alert_log("join/upd", "회원정보가 수정 되었습니다. 로그인해 주십시요.", base_url("/auth/login"));
-                        }
-                    }
-                    else
+                    // No data found/변경내용이 없을 경우, 다건 처리시 정상으로 리턴되어 추가로 확인 처리함
+                    $prcs_cnt = $this->db->affected_rows();
+                    if ($prcs_cnt != 1)
                     {
                         info_log("join/upd/update_tba001i00_1", "last_query  = [" . $this->db->last_query() . "]");
                         $this->db->trans_rollback();
-                        alert_log("join/upd/update_tba001i00_1", "[SQL ERR] 회원정보 수정 오류!");
+                        alert_log("join/upd/update_tba001i00_1", "[SQL ERR] 회원정보 수정 건수 오류[" . $prcs_cnt . "]!");
                     }
+                    else
+                    {
+                        $this->db->trans_commit();
+
+                        info_log("join/upd/", "회원정보 수정 완료!");
+                        info_log("join/upd/", "================================================================================");
+
+                        session_destroy();
+
+                        delete_cookie('usr_no');
+                        delete_cookie('idntfr');
+                        delete_cookie('tkn');
+
+                        alert_log("join/upd", "회원정보가 수정 되었습니다. 로그인해 주십시요.", base_url("/auth/login"));
+                    }
+                }
+                else
+                {
+                    info_log("join/upd/update_tba001i00_1", "last_query  = [" . $this->db->last_query() . "]");
+                    $this->db->trans_rollback();
+                    alert_log("join/upd/update_tba001i00_1", "[SQL ERR] 회원정보 수정 오류!");
                 }
             }
             else
             {
-                $this->join_v();
+                $this->load->view('pswd_v');
             }
         }
         else
         {
-            $this->join_v();
+            $this->load->view('pswd_v');
         }
     }
 

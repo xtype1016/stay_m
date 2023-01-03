@@ -69,6 +69,9 @@ Class Auth extends CI_Controller
             if (strcmp($_SESSION['usr_no'], "0000000006") == 0) {
                 redirect(base_url("/time_mng"));
             }
+            else if (strcmp($_SESSION['usr_no'], "0000000007") == 0) {
+                redirect(base_url("/expns/smmry"));
+            }
             else
             {
                 redirect(base_url("/incm"));
@@ -260,15 +263,22 @@ Class Auth extends CI_Controller
                     info_log("auth/login", "로그인 완료!");
                     info_log("auth/login", "================================================================================");
 
-                    if (strcmp($_SESSION['usr_no'], "0000000006") != 0)
-                    {
-                        redirect(base_url("incm"));
-                    }
-                    else if (strcmp($_SESSION['usr_no'], "0000000006") == 0)
+                    if (strcmp($_SESSION['usr_no'], "0000000006") == 0)
                     {
                         redirect(base_url("time_mng/ins"));
                     }
+                    else if (strcmp($_SESSION['usr_no'], "0000000007") == 0)
+                    {
+                        info_log("auth/login", "로그인 완료!!!");
+                        redirect(base_url("/expns/smmry"));
+                    }
+                    else
+                    {
+                        redirect(base_url("incm"));
+                    }
+
                 }
+
                 else
                 {
                     alert_log("auth", "아이디/비밀번호가 일치하지 않습니다!!![" . $usr_id . "]");
@@ -285,7 +295,6 @@ Class Auth extends CI_Controller
             $this->login_v();
         }
     }
-
 
     public function logout()
     {
