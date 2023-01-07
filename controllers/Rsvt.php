@@ -1583,7 +1583,9 @@ class Rsvt extends CI_Controller
                 // 숙박 1일차 || 준성수기 || 공휴일 || 성수기
                 //2022.12.14. 연박할인은 3박 부터 적용 추가
                 //if ($r_dt->rnum == 1 || $dt_prc->season_cls == '2' || ($dt_prc->dt_cls == '3') || ($dt_prc->season_cls == '1'))
-                if ($r_dt->rnum == 1 || $r_dt->rnum == 2 || $dt_prc->season_cls == '2' || ($dt_prc->dt_cls == '3') || ($dt_prc->season_cls == '1'))
+                // 2023.01.07. 2박의 경우 연박할인 없음. 3박 이상인 경우 2박부터 연박할인 적용
+                // 숙박 1일차 || 2박인 경우 || 공휴일 || 성수기 || 준성수기
+                if ($r_dt->rnum == 1 || $days_cnt == 2 || ($dt_prc->dt_cls == '3') || ($dt_prc->season_cls == '1') || $dt_prc->season_cls == '2' )
                 {
                     $tmp_prc = $dt_prc->prc;
                     info_log("rsvt/prc", "tmp_prc1      = [" . $tmp_prc . "]", $log_lvl);
